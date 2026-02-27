@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏭 Панель управления</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .btn {
+      padding: 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn:active {
+      background: rgba(59, 130, 246, 0.5);
+      transform: scale(0.98);
+    }
+    .btn-icon {
+      font-size: 24px;
+    }
+    .panel {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      display: none;
+    }
+    .panel.active {
+      display: block;
+    }
+    .panel h2 {
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    .item {
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border-left: 3px solid #3b82f6;
+    }
+    .item-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .item-path {
+      font-size: 12px;
+      color: #94a3b8;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    .item-status {
+      font-size: 12px;
+      color: #7dd3fc;
+      margin-top: 4px;
+    }
+    .back-btn {
+      background: rgba(255,255,255,0.1);
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .back-btn:active {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">🏭 ПАНЕЛЬ</div>
+
+    <!-- ГЛАВНАЯ МЕНЮ -->
+    <div id="main" class="panel active">
+      <div class="menu">
+        <button class="btn" onclick="show('kanban')">
+          <span class="btn-icon">📋</span>
+          <span>Канбан</span>
+        </button>
+        <button class="btn" onclick="show('projects')">
+          <span class="btn-icon">🚀</span>
+          <span>Проекты</span>
+        </button>
+        <button class="btn" onclick="show('expo')">
+          <span class="btn-icon">⚙️</span>
+          <span>Expo</span>
+        </button>
+        <button class="btn" onclick="show('status')">
+          <span class="btn-icon">📊</span>
+          <span>Статус</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- КАНБАН -->
+    <div id="kanban" class="panel">
+      <h2>📋 Канбан</h2>
+      <div style="margin-bottom: 16px;">
+        <div style="color: #ef4444; margin-bottom: 8px; font-weight: 600;">🔴 TODO</div>
+        <div class="item">
+          <div class="item-title">x5 → App Store</div>
+          <div class="item-status">Сборка EAS</div>
+        </div>
+        <div class="item">
+          <div class="item-title">Playa</div>
+          <div class="item-status">Создать приложение</div>
+        </div>
+        <div class="item">
+          <div class="item-title">Jewelry сайт</div>
+          <div class="item-status">Сделать сайт-визитку</div>
+        </div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div style="color: #eab308; margin-bottom: 8px; font-weight: 600;">🟡 IN PROGRESS</div>
+        <div class="item">
+          <div class="item-title">x5 Expo</div>
+          <div class="item-status">Запущен на :8082</div>
+        </div>
+      </div>
+      <div>
+        <div style="color: #22c55e; margin-bottom: 8px; font-weight: 600;">🟢 DONE</div>
+        <div class="item">
+          <div class="item-title">Expo setup</div>
+          <div class="item-status">Работает локально</div>
+        </div>
+      </div>
+      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
+    </div>
+
+    <!-- ПРОЕКТЫ -->
+    <div id="projects" class="panel">
+      <h2>🚀 Проекты</h2>
+      <div class="item">
+        <div class="item-title">1. x5-marketing-expo 🔄</div>
+        <div class="item-path">D:\X\Adilkhan\x5-marketing-expo</div>
+        <div class="item-status">Expo :8082 · Цель: App Store</div>
+      </div>
+      <div class="item">
+        <div class="item-title">2. Playa 📋</div>
+        <div class="item-path">D:\X\Adilkhan\Playa</div>
+        <div class="item-status">Создать приложение</div>
+      </div>
+      <div class="item">
+        <div class="item-title">3. Jewelry сайт 📋</div>
+        <div class="item-path">D:\X\Adilkhan\...</div>
+        <div class="item-status">Сделать сайт-визитку</div>
+      </div>
+      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
+    </div>
+
+    <!-- EXPO -->
+    <div id="expo" class="panel">
+      <h2>⚙️ Expo</h2>
+      <div class="item">
+        <div class="item-title">URL</div>
+        <div class="item-status">http://192.168.3.8:8082</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Проект</div>
+        <div class="item-status">x5-marketing-expo</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Статус</div>
+        <div class="item-status">✅ Работает</div>
+      </div>
+      <div style="margin-top: 16px;">
+        <button class="btn" onclick="restartExpo()" style="width: 100%; padding: 12px;">
+          🔄 Перезапустить
+        </button>
+      </div>
+      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
+    </div>
+
+    <!-- СТАТУС -->
+    <div id="status" class="panel">
+      <h2>📊 Статус</h2>
+      <div class="item">
+        <div class="item-title">Агенты</div>
+        <div class="item-status">main ✅ · ilon ✅</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Cron</div>
+        <div class="item-status">morning-pin ✅<br>evening-digest ✅<br>mainbus-digest ⚠️</div>
+      </div>
+      <div class="item">
+        <div class="item-title">Память</div>
+        <div class="item-status">MEMORY.md ✅</div>
+      </div>
+      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
+    </div>
+  </div>
+
+  <script>
+    function show(panel) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(panel).classList.add('active');
+    }
+    function restartExpo() {
+      alert('Перезапуск Expo... (выполняется на сервере)');
+      // Можно отправить webhook на сервер
+    }
+  </script>
+</body>
+</html>
