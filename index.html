@@ -2,238 +2,193 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🏭 Панель управления</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Dias Dashboard</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
-      color: #fff;
-      min-height: 100vh;
-      padding: 20px;
+    :root {
+      --bg: #0f0f0f;
+      --card: #1a1a1a;
+      --card2: #222;
+      --border: #2a2a2a;
+      --accent: #3b82f6;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --muted: #64748b;
     }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .btn {
-      padding: 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn:active {
-      background: rgba(59, 130, 246, 0.5);
-      transform: scale(0.98);
-    }
-    .btn-icon {
-      font-size: 24px;
-    }
-    .panel {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 20px;
-      display: none;
-    }
-    .panel.active {
-      display: block;
-    }
-    .panel h2 {
-      margin-bottom: 16px;
-      font-size: 20px;
-    }
-    .item {
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      border-left: 3px solid #3b82f6;
-    }
-    .item-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .item-path {
-      font-size: 12px;
-      color: #94a3b8;
-      font-family: monospace;
-      word-break: break-all;
-    }
-    .item-status {
-      font-size: 12px;
-      color: #7dd3fc;
-      margin-top: 4px;
-    }
-    .back-btn {
-      background: rgba(255,255,255,0.1);
-      padding: 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      text-align: center;
-      margin-top: 16px;
-    }
-    .back-btn:active {
-      background: rgba(255,255,255,0.2);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+    .header { background: linear-gradient(135deg, #1e3a8a, #312e81); padding: 20px 16px 32px; position: relative; }
+    .header::after { content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px; background: var(--bg); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; }
+    .header-title { font-size: 20px; font-weight: 700; }
+    .header-sub { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+    .revenue-card { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .revenue-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+    .revenue-amount { font-size: 24px; font-weight: 700; }
+    .revenue-badge { background: rgba(34,197,94,0.2); color: #22c55e; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #141414; border-top: 1px solid var(--border); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 0 8px; cursor: pointer; font-size: 10px; color: var(--muted); transition: color 0.15s; }
+    .nav-item.active { color: var(--accent); }
+    .nav-icon { font-size: 20px; margin-bottom: 2px; }
+    .page { display: none; padding: 16px; }
+    .page.active { display: block; }
+    .section-title { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; margin-top: 20px; }
+    .section-title:first-child { margin-top: 4px; }
+    .card { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--border); }
+    .card-row { display: flex; justify-content: space-between; align-items: center; }
+    .card-title { font-size: 15px; font-weight: 600; }
+    .card-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+    .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .badge-yellow { background: rgba(234,179,8,0.15); color: #fbbf24; }
+    .badge-gray { background: rgba(100,116,139,0.15); color: var(--muted); }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .stat-card { background: var(--card); border-radius: 12px; padding: 14px; border: 1px solid var(--border); }
+    .stat-value { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+    .stat-label { font-size: 12px; color: var(--muted); }
+    .kanban-col { margin-bottom: 20px; }
+    .kanban-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .kanban-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .kanban-col-title { font-size: 14px; font-weight: 600; }
+    .kanban-count { background: var(--card2); color: var(--muted); font-size: 11px; padding: 2px 7px; border-radius: 10px; }
+    .task-card { background: var(--card); border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-left: 3px solid transparent; }
+    .task-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .task-meta { font-size: 12px; color: var(--muted); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .expo-row { display: flex; align-items: center; gap: 8px; padding: 12px 14px; background: var(--card); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 8px; }
+    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; margin: 0 auto 12px; }
+    .profile-name { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .profile-role { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+    .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-key { color: var(--muted); }
+    .info-val { font-weight: 500; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">🏭 ПАНЕЛЬ</div>
 
-    <!-- ГЛАВНАЯ МЕНЮ -->
-    <div id="main" class="panel active">
-      <div class="menu">
-        <button class="btn" onclick="show('kanban')">
-          <span class="btn-icon">📋</span>
-          <span>Канбан</span>
-        </button>
-        <button class="btn" onclick="show('projects')">
-          <span class="btn-icon">🚀</span>
-          <span>Проекты</span>
-        </button>
-        <button class="btn" onclick="show('expo')">
-          <span class="btn-icon">⚙️</span>
-          <span>Expo</span>
-        </button>
-        <button class="btn" onclick="show('status')">
-          <span class="btn-icon">📊</span>
-          <span>Статус</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- КАНБАН -->
-    <div id="kanban" class="panel">
-      <h2>📋 Канбан</h2>
-      <div style="margin-bottom: 16px;">
-        <div style="color: #ef4444; margin-bottom: 8px; font-weight: 600;">🔴 TODO</div>
-        <div class="item">
-          <div class="item-title">x5 → App Store</div>
-          <div class="item-status">Сборка EAS</div>
-        </div>
-        <div class="item">
-          <div class="item-title">Playa</div>
-          <div class="item-status">Создать приложение</div>
-        </div>
-        <div class="item">
-          <div class="item-title">Jewelry сайт</div>
-          <div class="item-status">Сделать сайт-визитку</div>
-        </div>
-      </div>
-      <div style="margin-bottom: 16px;">
-        <div style="color: #eab308; margin-bottom: 8px; font-weight: 600;">🟡 IN PROGRESS</div>
-        <div class="item">
-          <div class="item-title">x5 Expo</div>
-          <div class="item-status">Запущен на :8082</div>
-        </div>
-      </div>
+<div id="page-home" class="page active">
+  <div class="header">
+    <div class="header-top">
       <div>
-        <div style="color: #22c55e; margin-bottom: 8px; font-weight: 600;">🟢 DONE</div>
-        <div class="item">
-          <div class="item-title">Expo setup</div>
-          <div class="item-status">Работает локально</div>
-        </div>
+        <div class="header-title">Привет, Диас 👋</div>
+        <div class="header-sub">Астана · Founder</div>
       </div>
-      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
+      <div class="avatar">Д</div>
     </div>
-
-    <!-- ПРОЕКТЫ -->
-    <div id="projects" class="panel">
-      <h2>🚀 Проекты</h2>
-      <div class="item">
-        <div class="item-title">1. x5-marketing-expo 🔄</div>
-        <div class="item-path">D:\X\Adilkhan\x5-marketing-expo</div>
-        <div class="item-status">Expo :8082 · Цель: App Store</div>
+    <div class="revenue-card">
+      <div>
+        <div class="revenue-label">Заработано</div>
+        <div class="revenue-amount">0 ₸</div>
       </div>
-      <div class="item">
-        <div class="item-title">2. Playa 📋</div>
-        <div class="item-path">D:\X\Adilkhan\Playa</div>
-        <div class="item-status">Создать приложение</div>
-      </div>
-      <div class="item">
-        <div class="item-title">3. Jewelry сайт 📋</div>
-        <div class="item-path">D:\X\Adilkhan\...</div>
-        <div class="item-status">Сделать сайт-визитку</div>
-      </div>
-      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
-    </div>
-
-    <!-- EXPO -->
-    <div id="expo" class="panel">
-      <h2>⚙️ Expo</h2>
-      <div class="item">
-        <div class="item-title">URL</div>
-        <div class="item-status">http://192.168.3.8:8082</div>
-      </div>
-      <div class="item">
-        <div class="item-title">Проект</div>
-        <div class="item-status">x5-marketing-expo</div>
-      </div>
-      <div class="item">
-        <div class="item-title">Статус</div>
-        <div class="item-status">✅ Работает</div>
-      </div>
-      <div style="margin-top: 16px;">
-        <button class="btn" onclick="restartExpo()" style="width: 100%; padding: 12px;">
-          🔄 Перезапустить
-        </button>
-      </div>
-      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
-    </div>
-
-    <!-- СТАТУС -->
-    <div id="status" class="panel">
-      <h2>📊 Статус</h2>
-      <div class="item">
-        <div class="item-title">Агенты</div>
-        <div class="item-status">main ✅ · ilon ✅</div>
-      </div>
-      <div class="item">
-        <div class="item-title">Cron</div>
-        <div class="item-status">morning-pin ✅<br>evening-digest ✅<br>mainbus-digest ⚠️</div>
-      </div>
-      <div class="item">
-        <div class="item-title">Память</div>
-        <div class="item-status">MEMORY.md ✅</div>
-      </div>
-      <div class="back-btn" onclick="show('main')">◀️ Назад</div>
+      <div class="revenue-badge">Цель: первая продажа</div>
     </div>
   </div>
+  <div style="padding-top: 28px;">
+    <div class="section-title">Проекты</div>
+    <div class="card">
+      <div class="card-row"><div class="card-title">x5-marketing-expo</div><span class="badge badge-blue">В работе</span></div>
+      <div class="card-sub">Expo :8082 · Цель: App Store</div>
+    </div>
+    <div class="card">
+      <div class="card-row"><div class="card-title">Playa</div><span class="badge badge-yellow">Планируется</span></div>
+      <div class="card-sub">Ювелирный маркетплейс · Expo + Supabase</div>
+    </div>
+    <div class="card">
+      <div class="card-row"><div class="card-title">Jewelry сайт</div><span class="badge badge-gray">Очередь</span></div>
+      <div class="card-sub">Сайт-визитка</div>
+    </div>
+    <div class="section-title">Статистика</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" style="color:var(--green)">0 ₸</div><div class="stat-label">Заработано</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:var(--accent)">3</div><div class="stat-label">Проектов</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:var(--yellow)">2</div><div class="stat-label">В работе</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:var(--muted)">11</div><div class="stat-label">Дней без выручки</div></div>
+    </div>
+  </div>
+</div>
 
-  <script>
-    function show(panel) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.getElementById(panel).classList.add('active');
-    }
-    function restartExpo() {
-      alert('Перезапуск Expo... (выполняется на сервере)');
-      // Можно отправить webhook на сервер
-    }
-  </script>
+<div id="page-kanban" class="page">
+  <div class="kanban-col">
+    <div class="kanban-header"><div class="kanban-dot" style="background:var(--red)"></div><span class="kanban-col-title">TODO</span><span class="kanban-count">3</span></div>
+    <div class="task-card" style="border-left-color:var(--red)"><div class="task-title">x5 → App Store</div><div class="task-meta">EAS Build · сборка + публикация</div></div>
+    <div class="task-card" style="border-left-color:var(--red)"><div class="task-title">Playa — создать приложение</div><div class="task-meta">Expo + Supabase + Kaspi</div></div>
+    <div class="task-card" style="border-left-color:var(--red)"><div class="task-title">Jewelry сайт</div><div class="task-meta">Сайт-визитка</div></div>
+  </div>
+  <div class="kanban-col">
+    <div class="kanban-header"><div class="kanban-dot" style="background:var(--yellow)"></div><span class="kanban-col-title">В работе</span><span class="kanban-count">1</span></div>
+    <div class="task-card" style="border-left-color:var(--yellow)"><div class="task-title">x5 Expo</div><div class="task-meta">Запущен на 192.168.3.8:8082</div></div>
+  </div>
+  <div class="kanban-col">
+    <div class="kanban-header"><div class="kanban-dot" style="background:var(--green)"></div><span class="kanban-col-title">Готово</span><span class="kanban-count">1</span></div>
+    <div class="task-card" style="border-left-color:var(--green)"><div class="task-title">Expo setup</div><div class="task-meta">Локально запущен, QR работает</div></div>
+  </div>
+</div>
+
+<div id="page-projects" class="page">
+  <div class="card">
+    <div class="card-row" style="margin-bottom:8px"><div class="card-title">x5-marketing-expo</div><span class="badge badge-blue">🔄 Активный</span></div>
+    <div class="card-sub" style="font-family:monospace;font-size:12px;margin-bottom:6px">D:\X\Adilkhan\x5-marketing-expo</div>
+    <div class="card-sub">Expo :8082 · feature/google-security-testflight</div>
+    <div style="margin-top:10px;font-size:12px;color:var(--accent)">→ App Store</div>
+  </div>
+  <div class="card">
+    <div class="card-row" style="margin-bottom:8px"><div class="card-title">Playa</div><span class="badge badge-yellow">📋 Планируется</span></div>
+    <div class="card-sub" style="font-family:monospace;font-size:12px;margin-bottom:6px">D:\X\Adilkhan\Playa</div>
+    <div class="card-sub">Expo + Supabase + Kaspi payments</div>
+  </div>
+  <div class="card">
+    <div class="card-row" style="margin-bottom:8px"><div class="card-title">Jewelry сайт</div><span class="badge badge-gray">📋 Очередь</span></div>
+    <div class="card-sub">Сайт-визитка для Адилхана</div>
+  </div>
+  <div class="expo-row">
+    <div class="status-dot"></div>
+    <div><div style="font-size:14px;font-weight:600">Expo работает</div><div style="font-size:12px;color:var(--muted)">192.168.3.8:8082</div></div>
+  </div>
+</div>
+
+<div id="page-profile" class="page">
+  <div style="padding-top:8px">
+    <div class="profile-avatar">Д</div>
+    <div class="profile-name">Диас</div>
+    <div class="profile-role">Founder · Астана, Казахстан</div>
+    <div class="card">
+      <div class="info-row"><span class="info-key">Возраст</span><span class="info-val">22</span></div>
+      <div class="info-row"><span class="info-key">Город</span><span class="info-val">Астана GMT+5</span></div>
+      <div class="info-row"><span class="info-key">Режим</span><span class="info-val">00:00 – 03:00</span></div>
+      <div class="info-row"><span class="info-key">Партнёр</span><span class="info-val">Адилхан (ювелирка)</span></div>
+      <div class="info-row"><span class="info-key">Revenue</span><span class="info-val" style="color:var(--green)">0 ₸</span></div>
+      <div class="info-row"><span class="info-key">Telegram</span><span class="info-val">@poebatk</span></div>
+    </div>
+    <div class="section-title">Агенты</div>
+    <div class="card">
+      <div class="info-row"><span class="info-key">Evil Morty</span><span class="badge badge-green">Онлайн</span></div>
+      <div class="info-row"><span class="info-key">Илон</span><span class="badge badge-green">Онлайн</span></div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-item active" onclick="nav('home',this)"><div class="nav-icon">🏠</div><span>Главная</span></div>
+  <div class="nav-item" onclick="nav('kanban',this)"><div class="nav-icon">📋</div><span>Задачи</span></div>
+  <div class="nav-item" onclick="nav('projects',this)"><div class="nav-icon">🚀</div><span>Проекты</span></div>
+  <div class="nav-item" onclick="nav('profile',this)"><div class="nav-icon">👤</div><span>Профиль</span></div>
+</nav>
+
+<script>
+  if (window.Telegram?.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
+  function nav(page, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    el.classList.add('active');
+  }
+</script>
 </body>
 </html>
