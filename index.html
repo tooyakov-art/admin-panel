@@ -122,6 +122,59 @@
 
     /* DIVIDER */
     .divider { height: 1px; background: var(--border); margin: 4px 0 14px; }
+
+    /* FACTORY PAGE */
+    .factory-header { text-align: center; padding: 16px 0 8px; }
+    .factory-title { font-size: 18px; font-weight: 800; letter-spacing: 1px; color: #a78bfa; text-shadow: 0 0 12px rgba(167,139,250,0.5); }
+    .factory-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    /* Command Center */
+    .cmd-center { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1e1b4b 100%); border: 1px solid rgba(99,102,241,0.4); border-radius: 18px; padding: 20px; margin-bottom: 14px; box-shadow: 0 0 24px rgba(99,102,241,0.2); position: relative; overflow: hidden; }
+    .cmd-center::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(99,102,241,0.04) 24px, rgba(99,102,241,0.04) 25px), repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(99,102,241,0.04) 24px, rgba(99,102,241,0.04) 25px); pointer-events: none; }
+    .cmd-morty { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    .morty-screen { font-size: 48px; line-height: 1; filter: drop-shadow(0 0 12px rgba(99,102,241,0.8)); animation: morty-glow 3s ease-in-out infinite; }
+    @keyframes morty-glow { 0%,100%{filter:drop-shadow(0 0 12px rgba(99,102,241,0.8))} 50%{filter:drop-shadow(0 0 20px rgba(167,139,250,1))} }
+    .morty-label { font-size: 14px; font-weight: 700; color: #a78bfa; margin-top: 8px; }
+    .morty-status { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; color: #4ade80; }
+    .morty-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
+    .cmd-screen-art { font-family: monospace; font-size: 10px; color: rgba(99,102,241,0.6); margin-top: 10px; line-height: 1.4; text-align: center; letter-spacing: 1px; }
+
+    /* Workers */
+    .workers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .worker-card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: border-color 0.3s; }
+    .worker-card.busy { border-color: rgba(99,102,241,0.5); box-shadow: 0 0 16px rgba(99,102,241,0.12); }
+    .worker-card.idle { border-color: var(--border); }
+    .worker-avatar { font-size: 30px; text-align: center; margin-bottom: 6px; }
+    .worker-name { font-size: 13px; font-weight: 700; text-align: center; }
+    .worker-handle { font-size: 10px; color: var(--muted); text-align: center; margin-bottom: 8px; }
+    .worker-task { font-size: 11px; color: var(--muted2); background: var(--card2); border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; min-height: 36px; line-height: 1.4; }
+    .worker-task.active-task { color: #c4b5fd; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); }
+    .progress-bar-wrap { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+    .progress-bar-fill.p-active { background: linear-gradient(90deg, #6366f1, #a78bfa); box-shadow: 0 0 8px rgba(99,102,241,0.6); animation: progress-glow 2s ease-in-out infinite; }
+    .progress-bar-fill.p-idle { background: var(--muted); }
+    @keyframes progress-glow { 0%,100%{box-shadow:0 0 4px rgba(99,102,241,0.4)} 50%{box-shadow:0 0 12px rgba(167,139,250,0.8)} }
+    .progress-label { font-size: 10px; color: var(--muted); text-align: right; margin-top: 3px; }
+
+    /* Worker status badge */
+    .worker-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; display: inline-block; margin-bottom: 6px; }
+    .worker-badge.wbusy { background: rgba(99,102,241,0.2); color: #818cf8; }
+    .worker-badge.widle { background: rgba(100,116,139,0.12); color: var(--muted); }
+
+    /* Activity Log */
+    .log-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+    .log-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .log-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
+    .log-entry { font-size: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); line-height: 1.5; color: var(--muted2); display: flex; gap: 8px; align-items: flex-start; }
+    .log-entry:last-child { border-bottom: none; }
+    .log-entry .log-who { color: #a78bfa; font-weight: 600; white-space: nowrap; }
+    .log-entry .log-arrow { color: var(--muted); }
+    .log-entry .log-msg { flex: 1; }
+    .log-time { font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+    /* Scan line animation on cmd center */
+    .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent); animation: scan 4s linear infinite; pointer-events: none; z-index: 2; }
+    @keyframes scan { 0%{top:-2px;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
   </style>
 </head>
 <body>
@@ -379,12 +432,97 @@
   </div>
 </div>
 
+<!-- FACTORY PAGE -->
+<div id="page-factory" class="page">
+  <div class="factory-header">
+    <div class="factory-title">🏭 ФАБРИКА</div>
+    <div class="factory-sub">Командный пункт · агенты в работе</div>
+  </div>
+
+  <!-- Evil Morty Command Center -->
+  <div class="cmd-center">
+    <div class="scan-line"></div>
+    <div class="cmd-morty">
+      <div class="morty-screen">🤖</div>
+      <div class="morty-label">Evil Morty</div>
+      <div class="morty-status">
+        <div class="morty-status-dot"></div>
+        Online, контролирует
+      </div>
+      <div class="cmd-screen-art">
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓<br>
+█ FACTORY CONTROL █<br>
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+      </div>
+    </div>
+  </div>
+
+  <!-- Workers -->
+  <div class="section-title">Воркеры</div>
+  <div class="workers-grid">
+    <!-- Worker 1 -->
+    <div class="worker-card busy">
+      <div class="worker-avatar">⚡</div>
+      <div class="worker-name">Worker 1</div>
+      <div class="worker-handle">@x5_worker_bot</div>
+      <div class="worker-badge wbusy">В работе</div>
+      <div class="worker-task active-task">Билд #12 — ожидание EAS</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill p-active" style="width:60%"></div>
+      </div>
+      <div class="progress-label">60%</div>
+    </div>
+    <!-- Worker 2 -->
+    <div class="worker-card idle">
+      <div class="worker-avatar">💎</div>
+      <div class="worker-name">Worker 2</div>
+      <div class="worker-handle">@jewelry_worker_bot</div>
+      <div class="worker-badge widle">Свободен</div>
+      <div class="worker-task">Ожидает задачу</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill p-idle" style="width:0%"></div>
+      </div>
+      <div class="progress-label">0%</div>
+    </div>
+  </div>
+
+  <!-- Activity Log -->
+  <div class="log-box">
+    <div class="log-title">Лог действий</div>
+    <div class="log-entry">
+      <span class="log-who">[Evil Morty]</span>
+      <span class="log-arrow">→</span>
+      <span class="log-msg">передал задачу Worker 1: запустить Билд #12 EAS</span>
+      <span class="log-time">23:41</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-who">[Worker 1]</span>
+      <span class="log-arrow">→</span>
+      <span class="log-msg">принял задачу, билд отправлен в очередь EAS</span>
+      <span class="log-time">23:42</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-who">[Evil Morty]</span>
+      <span class="log-arrow">→</span>
+      <span class="log-msg">Worker 2 в режиме ожидания — задач нет</span>
+      <span class="log-time">23:43</span>
+    </div>
+    <div class="log-entry">
+      <span class="log-who">[Worker 1]</span>
+      <span class="log-arrow">→</span>
+      <span class="log-msg">прогресс 60% — ждём ответ EAS серверов</span>
+      <span class="log-time">00:00</span>
+    </div>
+  </div>
+</div>
+
 <!-- BOTTOM NAV -->
 <nav class="nav">
   <div class="nav-item active" onclick="nav('home',this)"><div class="nav-icon">🏠</div><span>Главная</span></div>
   <div class="nav-item" onclick="nav('kanban',this)"><div class="nav-icon">📋</div><span>Задачи</span></div>
   <div class="nav-item" onclick="nav('projects',this)"><div class="nav-icon">🚀</div><span>Проекты</span></div>
   <div class="nav-item" onclick="nav('profile',this)"><div class="nav-icon">👤</div><span>Профиль</span></div>
+  <div class="nav-item" onclick="nav('factory',this)"><div class="nav-icon">🏭</div><span>Фабрика</span></div>
 </nav>
 
 <script>
