@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -7,536 +7,156 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #0a0a0f;
-      --card: #13131a;
-      --card2: #1c1c26;
-      --border: #23233a;
-      --accent: #6366f1;
-      --accent2: #818cf8;
-      --green: #22c55e;
-      --yellow: #f59e0b;
-      --red: #ef4444;
-      --purple: #a855f7;
-      --text: #f1f5f9;
-      --muted: #64748b;
-      --muted2: #94a3b8;
+      --bg: #0a0a0f; --card: #13131a; --card2: #1c1c26; --border: #23233a;
+      --accent: #6366f1; --accent2: #818cf8; --green: #22c55e;
+      --yellow: #f59e0b; --red: #ef4444; --purple: #a855f7;
+      --text: #f1f5f9; --muted: #64748b; --muted2: #94a3b8;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
-
-    /* HEADER */
-    .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%); padding: 20px 16px 36px; position: relative; overflow: hidden; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 32px; }
+    .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%); padding: 24px 16px 44px; position: relative; overflow: hidden; }
     .header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; background: rgba(99,102,241,0.15); border-radius: 50%; }
     .header::after { content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px; background: var(--bg); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
-    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; position: relative; z-index: 1; }
+    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; z-index: 1; }
     .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; box-shadow: 0 4px 15px rgba(99,102,241,0.4); }
     .header-title { font-size: 20px; font-weight: 700; }
     .header-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 2px; }
-    .revenue-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 14px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
+    .revenue-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 14px; padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
     .revenue-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .revenue-amount { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+    .revenue-amount { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
     .revenue-badge { background: rgba(34,197,94,0.2); color: #4ade80; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid rgba(34,197,94,0.2); }
-
-    /* NAV */
-    .nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(13,13,20,0.95); border-top: 1px solid var(--border); backdrop-filter: blur(20px); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 0 8px; cursor: pointer; font-size: 10px; color: var(--muted); transition: all 0.2s; }
-    .nav-item.active { color: var(--accent2); }
-    .nav-item.active .nav-icon { transform: scale(1.1); }
-    .nav-icon { font-size: 20px; margin-bottom: 2px; transition: transform 0.2s; }
-
-    /* PAGES */
-    .page { display: none; padding: 16px; }
-    .page.active { display: block; }
-
-    /* SECTIONS */
-    .section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 22px; display: flex; align-items: center; gap: 6px; }
-    .section-title:first-child { margin-top: 4px; }
+    .content { padding: 28px 16px 0; }
+    .section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
     .section-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
-
-    /* CARDS */
-    .card { background: var(--card); border-radius: 14px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.3); transition: border-color 0.2s; }
-    .card:active { border-color: var(--accent); }
-    .card-row { display: flex; justify-content: space-between; align-items: center; }
-    .card-title { font-size: 15px; font-weight: 600; }
-    .card-sub { font-size: 13px; color: var(--muted2); margin-top: 5px; }
-
-    /* BADGES */
-    .badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; }
-    .badge-blue { background: rgba(99,102,241,0.15); color: #818cf8; }
-    .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .spacer { height: 28px; }
+    .todo-item { background: var(--card); border-radius: 14px; padding: 15px 16px; margin-bottom: 10px; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 14px; cursor: pointer; transition: border-color 0.2s; }
+    .todo-item:active { border-color: var(--accent); }
+    .todo-cb { width: 22px; height: 22px; border-radius: 7px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+    .todo-cb.checked { background: var(--accent); border-color: var(--accent); }
+    .todo-cb.checked::after { content: "checkmark"; color: white; font-size: 13px; font-weight: 700; }
+    .todo-text { flex: 1; }
+    .todo-title { font-size: 15px; font-weight: 600; }
+    .todo-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .todo-item.done .todo-title { text-decoration: line-through; color: var(--muted); }
+    .badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+    .badge-red { background: rgba(239,68,68,0.15); color: #f87171; }
     .badge-yellow { background: rgba(245,158,11,0.15); color: #fbbf24; }
     .badge-gray { background: rgba(100,116,139,0.12); color: var(--muted); }
-    .badge-purple { background: rgba(168,85,247,0.15); color: #c084fc; }
-
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .stat-card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
-    .stat-value { font-size: 22px; font-weight: 800; margin-bottom: 2px; letter-spacing: -0.5px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-card { background: var(--card); border-radius: 14px; padding: 16px; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .stat-value { font-size: 22px; font-weight: 800; margin-bottom: 3px; letter-spacing: -0.5px; }
     .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
-
-    /* KANBAN */
-    .kanban-col { margin-bottom: 20px; }
-    .kanban-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-    .kanban-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .kanban-col-title { font-size: 14px; font-weight: 600; }
-    .kanban-count { background: var(--card2); color: var(--muted); font-size: 11px; padding: 2px 7px; border-radius: 10px; }
-    .task-card { background: var(--card); border-radius: 12px; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-left: 3px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .task-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-    .task-meta { font-size: 12px; color: var(--muted); }
-
-    /* TODAY TASKS */
-    .todo-item { background: var(--card); border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color 0.2s; }
-    .todo-item:active { border-color: var(--accent); }
-    .todo-cb { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
-    .todo-cb.checked { background: var(--accent); border-color: var(--accent); }
-    .todo-cb.checked::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
-    .todo-text { flex: 1; }
-    .todo-title { font-size: 14px; font-weight: 500; }
-    .todo-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .todo-item.done .todo-title { text-decoration: line-through; color: var(--muted); }
-
-    /* TEAM */
-    .team-item { background: var(--card); border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; }
+    .team-item { background: var(--card); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; }
     .team-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
     .team-icon-morty { background: linear-gradient(135deg, #312e81, #6366f1); }
     .team-icon-w1 { background: linear-gradient(135deg, #065f46, #059669); }
-    .team-icon-w2 { background: linear-gradient(135deg, #7c2d12, #ea580c); }
     .team-info { flex: 1; }
     .team-name { font-size: 14px; font-weight: 600; }
     .team-handle { font-size: 12px; color: var(--muted); margin-top: 1px; }
     .team-status { font-size: 12px; font-weight: 500; }
-
-    /* STATUS */
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-    .expo-row { display: flex; align-items: center; gap: 10px; padding: 13px 14px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; }
-
-    /* PROFILE */
-    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; margin: 0 auto 12px; box-shadow: 0 8px 24px rgba(99,102,241,0.35); }
-    .profile-name { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-    .profile-role { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; }
-    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-    .info-row:last-child { border-bottom: none; }
-    .info-key { color: var(--muted); }
-    .info-val { font-weight: 500; }
-
-    /* DIVIDER */
-    .divider { height: 1px; background: var(--border); margin: 4px 0 14px; }
-
-    /* FACTORY PAGE */
-    .factory-header { text-align: center; padding: 16px 0 8px; }
-    .factory-title { font-size: 18px; font-weight: 800; letter-spacing: 1px; color: #a78bfa; text-shadow: 0 0 12px rgba(167,139,250,0.5); }
-    .factory-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
-
-    /* Command Center */
-    .cmd-center { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1e1b4b 100%); border: 1px solid rgba(99,102,241,0.4); border-radius: 18px; padding: 20px; margin-bottom: 14px; box-shadow: 0 0 24px rgba(99,102,241,0.2); position: relative; overflow: hidden; }
-    .cmd-center::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(99,102,241,0.04) 24px, rgba(99,102,241,0.04) 25px), repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(99,102,241,0.04) 24px, rgba(99,102,241,0.04) 25px); pointer-events: none; }
-    .cmd-morty { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
-    .morty-screen { font-size: 48px; line-height: 1; filter: drop-shadow(0 0 12px rgba(99,102,241,0.8)); animation: morty-glow 3s ease-in-out infinite; }
-    @keyframes morty-glow { 0%,100%{filter:drop-shadow(0 0 12px rgba(99,102,241,0.8))} 50%{filter:drop-shadow(0 0 20px rgba(167,139,250,1))} }
-    .morty-label { font-size: 14px; font-weight: 700; color: #a78bfa; margin-top: 8px; }
-    .morty-status { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; color: #4ade80; }
-    .morty-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
-    .cmd-screen-art { font-family: monospace; font-size: 10px; color: rgba(99,102,241,0.6); margin-top: 10px; line-height: 1.4; text-align: center; letter-spacing: 1px; }
-
-    /* Workers */
-    .workers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-    .worker-card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: border-color 0.3s; }
-    .worker-card.busy { border-color: rgba(99,102,241,0.5); box-shadow: 0 0 16px rgba(99,102,241,0.12); }
-    .worker-card.idle { border-color: var(--border); }
-    .worker-avatar { font-size: 30px; text-align: center; margin-bottom: 6px; }
-    .worker-name { font-size: 13px; font-weight: 700; text-align: center; }
-    .worker-handle { font-size: 10px; color: var(--muted); text-align: center; margin-bottom: 8px; }
-    .worker-task { font-size: 11px; color: var(--muted2); background: var(--card2); border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; min-height: 36px; line-height: 1.4; }
-    .worker-task.active-task { color: #c4b5fd; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); }
-    .progress-bar-wrap { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
-    .progress-bar-fill.p-active { background: linear-gradient(90deg, #6366f1, #a78bfa); box-shadow: 0 0 8px rgba(99,102,241,0.6); animation: progress-glow 2s ease-in-out infinite; }
-    .progress-bar-fill.p-idle { background: var(--muted); }
-    @keyframes progress-glow { 0%,100%{box-shadow:0 0 4px rgba(99,102,241,0.4)} 50%{box-shadow:0 0 12px rgba(167,139,250,0.8)} }
-    .progress-label { font-size: 10px; color: var(--muted); text-align: right; margin-top: 3px; }
-
-    /* Worker status badge */
-    .worker-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; display: inline-block; margin-bottom: 6px; }
-    .worker-badge.wbusy { background: rgba(99,102,241,0.2); color: #818cf8; }
-    .worker-badge.widle { background: rgba(100,116,139,0.12); color: var(--muted); }
-
-    /* Activity Log */
-    .log-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
-    .log-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .log-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
-    .log-entry { font-size: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); line-height: 1.5; color: var(--muted2); display: flex; gap: 8px; align-items: flex-start; }
-    .log-entry:last-child { border-bottom: none; }
-    .log-entry .log-who { color: #a78bfa; font-weight: 600; white-space: nowrap; }
-    .log-entry .log-arrow { color: var(--muted); }
-    .log-entry .log-msg { flex: 1; }
-    .log-time { font-size: 10px; color: var(--muted); white-space: nowrap; }
-
-    /* Scan line animation on cmd center */
-    .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent); animation: scan 4s linear infinite; pointer-events: none; z-index: 2; }
-    @keyframes scan { 0%{top:-2px;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
   </style>
 </head>
 <body>
+<script>if (window.Telegram && window.Telegram.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }</script>
 
-<!-- HOME PAGE -->
-<div id="page-home" class="page active">
-  <div class="header">
-    <div class="header-top">
-      <div>
-        <div class="header-title">Привет, Диас 👋</div>
-        <div class="header-sub">Астана · Founder</div>
-      </div>
-      <div class="avatar">Д</div>
-    </div>
-    <div class="revenue-card">
-      <div>
-        <div class="revenue-label">Revenue</div>
-        <div class="revenue-amount">80,000 ₸</div>
-      </div>
-      <div class="revenue-badge">+активный рост</div>
-    </div>
-  </div>
-
-  <div style="padding-top:28px">
-
-    <!-- СЕГОДНЯ -->
-    <div class="section-title">Сегодня</div>
-
-    <div class="todo-item" onclick="toggleTodo(this)">
-      <div class="todo-cb"></div>
-      <div class="todo-text">
-        <div class="todo-title">x5-marketing: App Store</div>
-        <div class="todo-sub">Билд #12 в очереди</div>
-      </div>
-      <span class="badge badge-blue">🔥</span>
-    </div>
-    <div class="todo-item" onclick="toggleTodo(this)">
-      <div class="todo-cb"></div>
-      <div class="todo-text">
-        <div class="todo-title">Jewelry: правки от клиента</div>
-        <div class="todo-sub">Ждём список изменений</div>
-      </div>
-    </div>
-    <div class="todo-item" onclick="toggleTodo(this)">
-      <div class="todo-cb"></div>
-      <div class="todo-text">
-        <div class="todo-title">KazLog: правки от клиента</div>
-        <div class="todo-sub">Vite + React · сайт клиента</div>
-      </div>
-    </div>
-    <div class="todo-item" onclick="toggleTodo(this)">
-      <div class="todo-cb"></div>
-      <div class="todo-text">
-        <div class="todo-title">Структура: настройка воркеров</div>
-        <div class="todo-sub">Конфиг агентов и задачи</div>
-      </div>
-      <span class="badge badge-purple">⚙️</span>
-    </div>
-
-    <!-- ЗАВТРА -->
-    <div class="section-title">Завтра</div>
-    <div class="card" style="border-left: 3px solid var(--yellow);">
-      <div class="card-row">
-        <div class="card-title">Playa</div>
-        <span class="badge badge-yellow">Отложено</span>
-      </div>
-      <div class="card-sub">Ювелирный маркетплейс · Expo + Supabase + Kaspi</div>
-    </div>
-
-    <!-- КОМАНДА -->
-    <div class="section-title">Команда</div>
-    <div class="team-item">
-      <div class="team-icon team-icon-morty">🤖</div>
-      <div class="team-info">
-        <div class="team-name">Evil Morty</div>
-        <div class="team-handle">@testDiss21bot</div>
-      </div>
-      <div class="team-status" style="color:var(--green)">✅ Active</div>
-    </div>
-    <div class="team-item">
-      <div class="team-icon team-icon-w1">⚡</div>
-      <div class="team-info">
-        <div class="team-name">Worker 1</div>
-        <div class="team-handle">@x5_worker_bot</div>
-      </div>
-      <div class="team-status" style="color:var(--green)">✅ Настроен</div>
-    </div>
-    <div class="team-item">
-      <div class="team-icon team-icon-w2">💎</div>
-      <div class="team-info">
-        <div class="team-name">Worker 2</div>
-        <div class="team-handle">@jewelry_worker_bot</div>
-      </div>
-      <div class="team-status" style="color:var(--yellow)">📋 Создан</div>
-    </div>
-
-    <!-- СТАТИСТИКА -->
-    <div class="section-title">Статистика</div>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-value" style="color:var(--green)">80K ₸</div><div class="stat-label">Заработано</div></div>
-      <div class="stat-card"><div class="stat-value" style="color:var(--accent2)">4</div><div class="stat-label">Проектов</div></div>
-      <div class="stat-card"><div class="stat-value" style="color:var(--yellow)">2</div><div class="stat-label">В работе</div></div>
-      <div class="stat-card"><div class="stat-value" style="color:var(--purple)">3</div><div class="stat-label">Ботов</div></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- KANBAN PAGE -->
-<div id="page-kanban" class="page">
-  <div class="kanban-col">
-    <div class="kanban-header">
-      <div class="kanban-dot" style="background:var(--yellow)"></div>
-      <span class="kanban-col-title">Ждём</span>
-      <span class="kanban-count">1</span>
-    </div>
-    <div class="task-card" style="border-left-color:var(--yellow)">
-      <div class="task-title">Казах Логистик — доп правки</div>
-      <div class="task-meta">Ждём от клиента · основное сделано 27 фев</div>
-    </div>
-  </div>
-  <div class="kanban-col">
-    <div class="kanban-header">
-      <div class="kanban-dot" style="background:var(--red)"></div>
-      <span class="kanban-col-title">TODO</span>
-      <span class="kanban-count">4</span>
-    </div>
-    <div class="task-card" style="border-left-color:var(--red)">
-      <div class="task-title">x5 → App Store</div>
-      <div class="task-meta">EAS Build #12 · сборка + публикация</div>
-    </div>
-    <div class="task-card" style="border-left-color:var(--red)">
-      <div class="task-title">Jewelry — правки от клиента</div>
-      <div class="task-meta">Ждём список правок</div>
-    </div>
-    <div class="task-card" style="border-left-color:var(--red)">
-      <div class="task-title">Playa — создать приложение</div>
-      <div class="task-meta">Expo + Supabase + Kaspi · отложено</div>
-    </div>
-    <div class="task-card" style="border-left-color:var(--accent)">
-      <div class="task-title">Структура: настройка воркеров</div>
-      <div class="task-meta">Конфиг агентов фабрики</div>
-    </div>
-  </div>
-  <div class="kanban-col">
-    <div class="kanban-header">
-      <div class="kanban-dot" style="background:var(--green)"></div>
-      <span class="kanban-col-title">Готово</span>
-      <span class="kanban-count">4</span>
-    </div>
-    <div class="task-card" style="border-left-color:var(--green)">
-      <div class="task-title">Казах Логистик — правки</div>
-      <div class="task-meta">3PL, площади, Яндекс карты · 27 фев</div>
-    </div>
-    <div class="task-card" style="border-left-color:var(--green)">
-      <div class="task-title">Tailscale</div>
-      <div class="task-meta">VPN настроен · комп + iPhone</div>
-    </div>
-    <div class="task-card" style="border-left-color:var(--green)">
-      <div class="task-title">Admin Panel</div>
-      <div class="task-meta">Mini App в Telegram · GitHub Pages</div>
-    </div>
-    <div class="task-card" style="border-left-color:var(--green)">
-      <div class="task-title">Expo setup</div>
-      <div class="task-meta">Локально запущен, QR работает</div>
-    </div>
-  </div>
-</div>
-
-<!-- PROJECTS PAGE -->
-<div id="page-projects" class="page">
-  <div class="section-title">Мои проекты (Диас)</div>
-  <div class="card">
-    <div class="card-row" style="margin-bottom:8px">
-      <div class="card-title">WhatsApp бот</div>
-      <span class="badge badge-blue">🔥 В работе</span>
-    </div>
-    <div class="card-sub">Автозвонки · продажа · база номеров</div>
-    <div style="margin-top:10px;font-size:12px;color:var(--accent2)">→ Первая продажа</div>
-  </div>
-
-  <div class="section-title">Проекты Адилхана</div>
-  <div class="card">
-    <div class="card-row" style="margin-bottom:8px">
-      <div class="card-title">x5-marketing-expo</div>
-      <span class="badge badge-blue">🔄 Активный</span>
-    </div>
-    <div class="card-sub" style="font-family:monospace;font-size:12px;margin-bottom:6px">D:\X\Adilkhan\x5-marketing-expo</div>
-    <div class="card-sub">Expo :8082 · Билд #12 в App Store очереди</div>
-    <div style="margin-top:10px;font-size:12px;color:var(--accent2)">→ App Store публикация</div>
-  </div>
-  <div class="card">
-    <div class="card-row" style="margin-bottom:8px">
-      <div class="card-title">Playa</div>
-      <span class="badge badge-yellow">📋 Отложено</span>
-    </div>
-    <div class="card-sub">Expo + Supabase + Kaspi payments · завтра</div>
-  </div>
-  <div class="card">
-    <div class="card-row" style="margin-bottom:8px">
-      <div class="card-title">Jewelry сайт</div>
-      <span class="badge badge-yellow">🔧 Правки</span>
-    </div>
-    <div class="card-sub">Сайт-визитка · правки от клиента</div>
-  </div>
-  <div class="card">
-    <div class="card-row" style="margin-bottom:8px">
-      <div class="card-title">Казах Логистик</div>
-      <span class="badge badge-yellow">🔧 Правки</span>
-    </div>
-    <div class="card-sub">Vite + React · правки от клиента</div>
-  </div>
-
-  <div class="section-title">Expo</div>
-  <div class="expo-row">
-    <div class="status-dot"></div>
+<div class="header">
+  <div class="header-top">
     <div>
-      <div style="font-size:14px;font-weight:600">Expo работает</div>
-      <div style="font-size:12px;color:var(--muted)">192.168.3.8:8082</div>
+      <div class="header-title">Привет, Диас 👋</div>
+      <div class="header-sub">Астана · Founder</div>
     </div>
+    <div class="avatar">Д</div>
+  </div>
+  <div class="revenue-card">
+    <div>
+      <div class="revenue-label">Revenue</div>
+      <div class="revenue-amount">80,000 ₸</div>
+    </div>
+    <div class="revenue-badge">+активный рост</div>
   </div>
 </div>
 
-<!-- PROFILE PAGE -->
-<div id="page-profile" class="page">
-  <div style="padding-top:8px">
-    <div class="profile-avatar">Д</div>
-    <div class="profile-name">Диас</div>
-    <div class="profile-role">Founder · Астана, Казахстан</div>
+<div class="content">
 
-    <div class="card">
-      <div class="info-row"><span class="info-key">Возраст</span><span class="info-val">22</span></div>
-      <div class="info-row"><span class="info-key">Город</span><span class="info-val">Астана GMT+5</span></div>
-      <div class="info-row"><span class="info-key">Режим</span><span class="info-val">00:00 – 03:00</span></div>
-      <div class="info-row"><span class="info-key">Партнёр</span><span class="info-val">Адилхан (ювелирка)</span></div>
-      <div class="info-row"><span class="info-key">Revenue</span><span class="info-val" style="color:var(--green)">80,000 ₸</span></div>
-      <div class="info-row"><span class="info-key">Telegram</span><span class="info-val">@poebatk</span></div>
-    </div>
+  <div class="section-title">Активные задачи</div>
 
-    <div class="section-title">Статус агентов</div>
-    <div class="card">
-      <div class="info-row">
-        <span class="info-key">Evil Morty</span>
-        <span class="badge badge-green">✅ Online</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Worker 1 (x5)</span>
-        <span class="badge badge-green">✅ Настроен</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Worker 2 (Jewelry)</span>
-        <span class="badge badge-yellow">📋 Создан</span>
-      </div>
+  <div class="todo-item" onclick="toggleTodo(this)">
+    <div class="todo-cb"></div>
+    <div class="todo-text">
+      <div class="todo-title">Jewelry — сайт-визитка</div>
+      <div class="todo-sub">Делаем сайт с нуля</div>
     </div>
+    <span class="badge badge-red">🔴</span>
   </div>
+
+  <div class="todo-item" onclick="toggleTodo(this)">
+    <div class="todo-cb"></div>
+    <div class="todo-text">
+      <div class="todo-title">Казах Логистик — правки</div>
+      <div class="todo-sub">Ждём список от клиента</div>
+    </div>
+    <span class="badge badge-yellow">⏳</span>
+  </div>
+
+  <div class="todo-item" onclick="toggleTodo(this)">
+    <div class="todo-cb"></div>
+    <div class="todo-text">
+      <div class="todo-title">Бот</div>
+      <div class="todo-sub">После jewelry + логистики</div>
+    </div>
+    <span class="badge badge-gray">📋</span>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="section-title">Отложено</div>
+
+  <div class="todo-item" style="opacity:0.45">
+    <div class="todo-cb"></div>
+    <div class="todo-text">
+      <div class="todo-title">x5-marketing — App Store</div>
+      <div class="todo-sub">Пауза</div>
+    </div>
+    <span class="badge badge-gray">⏸</span>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="section-title">Статистика</div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" style="color:var(--green)">80K ₸</div><div class="stat-label">Заработано</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--accent2)">2</div><div class="stat-label">В работе</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--yellow)">1</div><div class="stat-label">Ждём клиента</div></div>
+    <div class="stat-card"><div class="stat-value" style="color:var(--purple)">2</div><div class="stat-label">Ботов</div></div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="section-title">Команда</div>
+
+  <div class="team-item">
+    <div class="team-icon team-icon-morty">🤖</div>
+    <div class="team-info">
+      <div class="team-name">Evil Morty</div>
+      <div class="team-handle">@testDiss21bot</div>
+    </div>
+    <div class="team-status" style="color:var(--green)">✅ Online</div>
+  </div>
+
+  <div class="team-item">
+    <div class="team-icon team-icon-w1">⚡</div>
+    <div class="team-info">
+      <div class="team-name">Worker 1</div>
+      <div class="team-handle">@x5_worker_bot</div>
+    </div>
+    <div class="team-status" style="color:var(--green)">✅ Готов</div>
+  </div>
+
 </div>
-
-<!-- FACTORY PAGE -->
-<div id="page-factory" class="page">
-  <div class="factory-header">
-    <div class="factory-title">🏭 ФАБРИКА</div>
-    <div class="factory-sub">Командный пункт · агенты в работе</div>
-  </div>
-
-  <!-- Evil Morty Command Center -->
-  <div class="cmd-center">
-    <div class="scan-line"></div>
-    <div class="cmd-morty">
-      <div class="morty-screen">🤖</div>
-      <div class="morty-label">Evil Morty</div>
-      <div class="morty-status">
-        <div class="morty-status-dot"></div>
-        Online, контролирует
-      </div>
-      <div class="cmd-screen-art">
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓<br>
-█ FACTORY CONTROL █<br>
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-      </div>
-    </div>
-  </div>
-
-  <!-- Workers -->
-  <div class="section-title">Воркеры</div>
-  <div class="workers-grid">
-    <!-- Worker 1 -->
-    <div class="worker-card busy">
-      <div class="worker-avatar">⚡</div>
-      <div class="worker-name">Worker 1</div>
-      <div class="worker-handle">@x5_worker_bot</div>
-      <div class="worker-badge wbusy">В работе</div>
-      <div class="worker-task active-task">Билд #12 — ожидание EAS</div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill p-active" style="width:60%"></div>
-      </div>
-      <div class="progress-label">60%</div>
-    </div>
-    <!-- Worker 2 -->
-    <div class="worker-card idle">
-      <div class="worker-avatar">💎</div>
-      <div class="worker-name">Worker 2</div>
-      <div class="worker-handle">@jewelry_worker_bot</div>
-      <div class="worker-badge widle">Свободен</div>
-      <div class="worker-task">Ожидает задачу</div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill p-idle" style="width:0%"></div>
-      </div>
-      <div class="progress-label">0%</div>
-    </div>
-  </div>
-
-  <!-- Activity Log -->
-  <div class="log-box">
-    <div class="log-title">Лог действий</div>
-    <div class="log-entry">
-      <span class="log-who">[Evil Morty]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">передал задачу Worker 1: запустить Билд #12 EAS</span>
-      <span class="log-time">23:41</span>
-    </div>
-    <div class="log-entry">
-      <span class="log-who">[Worker 1]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">принял задачу, билд отправлен в очередь EAS</span>
-      <span class="log-time">23:42</span>
-    </div>
-    <div class="log-entry">
-      <span class="log-who">[Evil Morty]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">Worker 2 в режиме ожидания — задач нет</span>
-      <span class="log-time">23:43</span>
-    </div>
-    <div class="log-entry">
-      <span class="log-who">[Worker 1]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">прогресс 60% — ждём ответ EAS серверов</span>
-      <span class="log-time">00:00</span>
-    </div>
-  </div>
-</div>
-
-<!-- BOTTOM NAV -->
-<nav class="nav">
-  <div class="nav-item active" onclick="nav('home',this)"><div class="nav-icon">🏠</div><span>Главная</span></div>
-  <div class="nav-item" onclick="nav('kanban',this)"><div class="nav-icon">📋</div><span>Задачи</span></div>
-  <div class="nav-item" onclick="nav('projects',this)"><div class="nav-icon">🚀</div><span>Проекты</span></div>
-  <div class="nav-item" onclick="nav('profile',this)"><div class="nav-icon">👤</div><span>Профиль</span></div>
-  <div class="nav-item" onclick="nav('factory',this)"><div class="nav-icon">🏭</div><span>Фабрика</span></div>
-</nav>
 
 <script>
-  if (window.Telegram?.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
-
-  function nav(page, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    el.classList.add('active');
-  }
-
   function toggleTodo(el) {
-    const cb = el.querySelector('.todo-cb');
+    var cb = el.querySelector('.todo-cb');
     cb.classList.toggle('checked');
     el.classList.toggle('done');
   }
