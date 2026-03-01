@@ -602,33 +602,33 @@
     <div class="pb-track" id="pb-track">
       <div class="pb-fill" id="pb-fill" style="height:35%"></div>
 
-      <!-- Уровень 5: Расходы (top) -->
-      <div class="pb-level" style="bottom:92%" onclick="pbTap('expenses')">
+      <!-- 5: Расходы (top) -->
+      <div class="pb-level" style="bottom:90%" onclick="pbTap('expenses')">
         <div class="pb-dot off" id="pb-expenses"></div>
         <div class="pb-label">Расходы</div>
       </div>
 
-      <!-- Уровень 4: Каспи -->
-      <div class="pb-level" style="bottom:72%" onclick="pbTap('kaspi')">
-        <div class="pb-dot warn" id="pb-kaspi"></div>
+      <!-- 4: Каспи -->
+      <div class="pb-level" style="bottom:70%" onclick="pbTap('kaspi')">
+        <div class="pb-dot off" id="pb-kaspi"></div>
         <div class="pb-label">Каспи</div>
       </div>
 
-      <!-- Уровень 3: Доходы -->
-      <div class="pb-level" style="bottom:52%" onclick="pbTap('income')">
-        <div class="pb-dot blocked" id="pb-income"></div>
+      <!-- 3: Доходы -->
+      <div class="pb-level" style="bottom:50%" onclick="pbTap('income')">
+        <div class="pb-dot off" id="pb-income"></div>
         <div class="pb-label">Доходы</div>
       </div>
 
-      <!-- Уровень 2: Инструменты -->
+      <!-- 2: Инструменты -->
       <div class="pb-level" style="bottom:30%" onclick="pbTap('tools')">
-        <div class="pb-dot blocked" id="pb-tools"></div>
+        <div class="pb-dot off" id="pb-tools"></div>
         <div class="pb-label">Инструм.</div>
       </div>
 
-      <!-- Уровень 1: Энергия (bottom) -->
-      <div class="pb-level" style="bottom:8%" onclick="pbTap('energy')">
-        <div class="pb-dot active" id="pb-energy"></div>
+      <!-- 1: Энергия (bottom) -->
+      <div class="pb-level" style="bottom:10%" onclick="pbTap('energy')">
+        <div class="pb-dot off" id="pb-energy"></div>
         <div class="pb-label">Энергия</div>
       </div>
     </div>
@@ -870,32 +870,51 @@ function closeDetail() {
 }
 
 // ── POWER BAR ──
-const pbLevels = {
-  energy: { section: null, label: '⚡ Энергия — Диас', status: 'active', desc: 'Источник. Работает.' },
-  tools: { section: 'openclaw', label: '🛠 Инструменты', status: 'blocked', desc: 'Правки клиента не исправлены → инструменты простаивают' },
-  income: { section: 'cl-logistic', label: '💰 Доходы', status: 'blocked', desc: 'Казах Логистик ждёт правки. x5 билд в очереди.' },
-  kaspi: { section: 'kaspi', label: '💳 Каспи', status: 'warn', desc: '80K ₸. Новых поступлений нет.' },
-  expenses: { section: 'exp-must', label: '📤 Расходы', status: 'off', desc: 'Суммы не зафиксированы.' },
-};
+const pbOrder = ['energy','tools','income','kaspi','expenses'];
+const pbNames = { energy:'⚡ Энергия', tools:'🛠 Инструм.', income:'💰 Доходы', kaspi:'💳 Каспи', expenses:'📤 Расходы' };
+const pbCycle = ['off','blocked','warn','active'];
+const pbState = JSON.parse(localStorage.getItem('pb-state') || '{}');
+
+// Init defaults
+pbOrder.forEach(k => { if (!pbState[k]) pbState[k] = 'off'; });
+
+function pbSave() {
+  localStorage.setItem('pb-state', JSON.stringify(pbState));
+}
+
+function pbRender() {
+  // Update dots
+  pbOrder.forEach(k => {
+    const dot = document.getElementById('pb-'+k);
+    if (!dot) return;
+    dot.className = 'pb-dot ' + pbState[k];
+  });
+
+  // Calculate fill height based on highest active level
+  let highest = -1;
+  pbOrder.forEach((k,i) => {
+    if (pbState[k] === 'active' || pbState[k] === 'warn') {
+      highest = Math.max(highest, i);
+    }
+  });
+  const pct = highest < 0 ? 0 : Math.round(((highest + 1) / pbOrder.length) * 100);
+  document.getElementById('pb-fill').style.height = pct + '%';
+}
 
 function pbTap(key) {
-  const lvl = pbLevels[key];
-  if (!lvl) return;
+  const cur = pbState[key] || 'off';
+  const idx = pbCycle.indexOf(cur);
+  pbState[key] = pbCycle[(idx + 1) % pbCycle.length];
+  pbSave();
+  pbRender();
 
-  // Show detail for this level
-  const panel = document.getElementById('map-detail');
-  document.getElementById('detail-title-text').textContent = lvl.label;
-  document.getElementById('detail-body').innerHTML =
-    `<div class="detail-row"><div class="detail-q">Статус</div><div class="detail-a">${lvl.desc}</div></div>`;
-  document.getElementById('detail-tasks').innerHTML = '';
-  panel.classList.add('open');
-  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-
-  // If has linked section, also show its detail
-  if (lvl.section && mapData[lvl.section]) {
-    showDetail(lvl.section);
+  // Haptic feedback
+  if (window.Telegram?.WebApp?.HapticFeedback) {
+    Telegram.WebApp.HapticFeedback.impactOccurred('light');
   }
 }
+
+pbRender();
 </script>
 </body>
 </html>
