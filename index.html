@@ -25,7 +25,7 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; overscroll-behavior: none; }
 
     /* HEADER */
-    .header { background: linear-gradient(160deg, #0f0c29 0%, #1e1b4b 40%, #24243e 100%); padding: 20px 16px 28px; padding-top: calc(20px + var(--safe-top)); position: relative; overflow: hidden; }
+    .header { background: linear-gradient(160deg, #0f0c29 0%, #1e1b4b 40%, #24243e 100%); padding: 20px 16px 14px; padding-top: calc(20px + var(--safe-top)); position: relative; overflow: hidden; }
     .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent); }
     .orb { position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none; }
     .orb1 { width: 180px; height: 180px; background: rgba(99,102,241,0.35); top: -60px; right: -40px; animation: orb-float1 6s ease-in-out infinite; }
@@ -211,7 +211,7 @@
     .map-line-col { display: flex; flex-direction: column; align-items: center; }
 
     /* CHART */
-    .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin: 12px 0 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin: 6px 16px 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
     .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .chart-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
     .chart-nav { display: flex; align-items: center; gap: 8px; }
@@ -305,7 +305,7 @@
     </div>
   </div>
 
-  <div style="padding-top:10px">
+  <div style="padding-top:0">
 
     <!-- CHART -->
     <div class="chart-wrap">
@@ -328,19 +328,7 @@
   </div>
 </div>
 
-<!-- KANBAN PAGE -->
-<div id="page-kanban" class="page">
-  <div class="kanban-col">
-    <div class="kanban-header">
-      <div class="kanban-dot" style="background:var(--yellow)"></div>
-      <span class="kanban-col-title">Ждём</span>
-      <span class="kanban-count">1</span>
-    </div>
-    <div class="task-card" style="border-left-color:var(--yellow)">
-      <div class="task-title">Казах Логистик — доп правки</div>
-      <div class="task-meta">Ждём от клиента · основное сделано 27 фев</div>
-    </div>
-  </div>
+
   <div class="kanban-col">
     <div class="kanban-header">
       <div class="kanban-dot" style="background:var(--red)"></div>
@@ -568,131 +556,13 @@
   <div style="height:20px"></div>
 </div>
 
-<!-- PROFILE PAGE -->
-<div id="page-profile" class="page">
-  <div style="padding-top:8px">
-    <div class="profile-avatar">Д</div>
-    <div class="profile-name">Диас</div>
-    <div class="profile-role">Founder · Астана, Казахстан</div>
 
-    <div class="card">
-      <div class="info-row"><span class="info-key">Возраст</span><span class="info-val">22</span></div>
-      <div class="info-row"><span class="info-key">Город</span><span class="info-val">Астана GMT+5</span></div>
-      <div class="info-row"><span class="info-key">Режим</span><span class="info-val">00:00 – 03:00</span></div>
-      <div class="info-row"><span class="info-key">Партнёр</span><span class="info-val">Адилхан (ювелирка)</span></div>
-      <div class="info-row"><span class="info-key">Revenue</span><span class="info-val" style="color:var(--green)">80,000 ₸</span></div>
-      <div class="info-row"><span class="info-key">Telegram</span><span class="info-val">@poebatk</span></div>
-    </div>
-
-    <div class="section-title">Статус агентов</div>
-    <div class="card">
-      <div class="info-row">
-        <span class="info-key">Evil Morty</span>
-        <span class="badge badge-green">✅ Online</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Worker 1 (x5)</span>
-        <span class="badge badge-green">✅ Настроен</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Worker 2 (Jewelry)</span>
-        <span class="badge badge-yellow">📋 Создан</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FACTORY PAGE -->
-<div id="page-factory" class="page">
-  <div class="factory-header">
-    <div class="factory-title">🏭 ФАБРИКА</div>
-    <div class="factory-sub">Командный пункт · агенты в работе</div>
-  </div>
-
-  <!-- Evil Morty Command Center -->
-  <div class="cmd-center">
-    <div class="scan-line"></div>
-    <div class="cmd-morty">
-      <div class="morty-screen">🤖</div>
-      <div class="morty-label">Evil Morty</div>
-      <div class="morty-status">
-        <div class="morty-status-dot"></div>
-        Online, контролирует
-      </div>
-      <div class="cmd-screen-art">
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓<br>
-█ FACTORY CONTROL █<br>
-▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-      </div>
-    </div>
-  </div>
-
-  <!-- Workers -->
-  <div class="section-title">Воркеры</div>
-  <div class="workers-grid">
-    <!-- Worker 1 -->
-    <div class="worker-card busy">
-      <div class="worker-avatar">⚡</div>
-      <div class="worker-name">Worker 1</div>
-      <div class="worker-handle">@x5_worker_bot</div>
-      <div class="worker-badge wbusy">В работе</div>
-      <div class="worker-task active-task">Билд #12 — ожидание EAS</div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill p-active" style="width:60%"></div>
-      </div>
-      <div class="progress-label">60%</div>
-    </div>
-    <!-- Worker 2 -->
-    <div class="worker-card idle">
-      <div class="worker-avatar">💎</div>
-      <div class="worker-name">Worker 2</div>
-      <div class="worker-handle">@jewelry_worker_bot</div>
-      <div class="worker-badge widle">Свободен</div>
-      <div class="worker-task">Ожидает задачу</div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill p-idle" style="width:0%"></div>
-      </div>
-      <div class="progress-label">0%</div>
-    </div>
-  </div>
-
-  <!-- Activity Log -->
-  <div class="log-box">
-    <div class="log-title">Лог действий</div>
-    <div class="log-entry">
-      <span class="log-who">[Evil Morty]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">передал задачу Worker 1: запустить Билд #12 EAS</span>
-      <span class="log-time">23:41</span>
-    </div>
-    <div class="log-entry">
-      <span class="log-who">[Worker 1]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">принял задачу, билд отправлен в очередь EAS</span>
-      <span class="log-time">23:42</span>
-    </div>
-    <div class="log-entry">
-      <span class="log-who">[Evil Morty]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">Worker 2 в режиме ожидания — задач нет</span>
-      <span class="log-time">23:43</span>
-    </div>
-    <div class="log-entry">
-      <span class="log-who">[Worker 1]</span>
-      <span class="log-arrow">→</span>
-      <span class="log-msg">прогресс 60% — ждём ответ EAS серверов</span>
-      <span class="log-time">00:00</span>
-    </div>
-  </div>
 </div>
 
 <!-- BOTTOM NAV -->
 <nav class="nav">
   <div class="nav-item active" onclick="nav('home',this)"><div class="nav-icon">🏠</div><span>Главная</span></div>
-  <div class="nav-item" onclick="nav('kanban',this)"><div class="nav-icon">📋</div><span>Задачи</span></div>
-  <div class="nav-item" onclick="nav('factory',this)"><div class="nav-icon">🏭</div><span>Фабрика</span></div>
   <div class="nav-item" onclick="nav('map',this)"><div class="nav-icon">🗺️</div><span>Система</span></div>
-  <div class="nav-item" onclick="nav('profile',this)"><div class="nav-icon">👤</div><span>Профиль</span></div>
 </nav>
 
 <script>
