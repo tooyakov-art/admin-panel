@@ -22,12 +22,18 @@
       --muted2: #94a3b8;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; overscroll-behavior: none; }
 
     /* HEADER */
-    .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%); padding: 20px 16px 36px; padding-top: calc(20px + var(--safe-top)); position: relative; overflow: hidden; }
-    .header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; background: rgba(99,102,241,0.15); border-radius: 50%; }
-    .header::after { content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px; background: var(--bg); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+    .header { background: linear-gradient(160deg, #0f0c29 0%, #1e1b4b 40%, #24243e 100%); padding: 20px 16px 28px; padding-top: calc(20px + var(--safe-top)); position: relative; overflow: hidden; }
+    .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent); }
+    .orb { position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none; }
+    .orb1 { width: 180px; height: 180px; background: rgba(99,102,241,0.35); top: -60px; right: -40px; animation: orb-float1 6s ease-in-out infinite; }
+    .orb2 { width: 120px; height: 120px; background: rgba(168,85,247,0.25); bottom: -30px; left: -20px; animation: orb-float2 8s ease-in-out infinite; }
+    .orb3 { width: 80px; height: 80px; background: rgba(59,130,246,0.2); top: 20px; left: 40%; animation: orb-float3 5s ease-in-out infinite; }
+    @keyframes orb-float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-15px,10px) scale(1.1)} }
+    @keyframes orb-float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(10px,-15px) scale(1.15)} }
+    @keyframes orb-float3 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(8px,-8px) scale(0.9)} 66%{transform:translate(-8px,5px) scale(1.1)} }
     .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; position: relative; z-index: 1; }
     .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; box-shadow: 0 4px 15px rgba(99,102,241,0.4); }
     .header-title { font-size: 20px; font-weight: 700; }
@@ -280,6 +286,9 @@
 <!-- HOME PAGE -->
 <div id="page-home" class="page active">
   <div class="header">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
     <div class="header-top">
       <div>
         <div class="header-title">Привет, Диас 👋</div>
