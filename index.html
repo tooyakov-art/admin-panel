@@ -544,7 +544,7 @@
     <div style="font-size:28px;filter:drop-shadow(0 0 10px rgba(99,102,241,0.8));animation:morty-glow 3s ease-in-out infinite">🤖</div>
     <div style="flex:1">
       <div class="sys-center-title">OpenClaw</div>
-      <div class="sys-center-sub">Выполнение задач · связь с доходом</div>
+      <div class="sys-center-sub">Выполнение задач · движок</div>
     </div>
     <div style="font-size:10px;color:#4ade80;font-weight:600;white-space:nowrap">● online</div>
   </div>
@@ -558,23 +558,28 @@
   <!-- Мой бизнес -->
   <div class="sys-col-wrap" style="margin-bottom:10px">
     <div class="sys-col-label">🏢 Мой бизнес</div>
-    <div class="sys-col-sub">сам нахожу, сам закрываю</div>
-    <div class="sys-node sys-green" onclick="showDetail('x5')" style="width:100%;margin-bottom:8px">
+    <div class="sys-col-sub">автоматизация · рассылка · продажа сайтов</div>
+    <div class="sys-node sys-green" onclick="showDetail('wa-bot')" style="width:100%">
+      <div class="sys-icon">🤖</div>
+      <div class="sys-name">WA Bot — рассылка</div>
+      <div class="sys-status sys-status-yellow">⚠ В разработке</div>
+    </div>
+  </div>
+
+  <!-- Адилхан -->
+  <div class="sys-col-wrap">
+    <div class="sys-col-label">💎 Адилхан</div>
+    <div class="sys-col-sub">партнёр — все клиенты через него</div>
+    <div class="sys-node sys-blue" onclick="showDetail('x5')" style="width:100%;margin-bottom:8px">
       <div class="sys-icon">⚡</div>
       <div class="sys-name">x5 Marketing</div>
       <div class="sys-status sys-status-yellow">⚠ В процессе</div>
     </div>
-    <div class="sys-node sys-muted" onclick="showDetail('playa')" style="width:100%">
+    <div class="sys-node sys-muted" onclick="showDetail('playa')" style="width:100%;margin-bottom:8px">
       <div class="sys-icon">🪩</div>
       <div class="sys-name">Playa</div>
       <div class="sys-status sys-status-gray">Отложено</div>
     </div>
-  </div>
-
-  <!-- Входящие — Адилхан -->
-  <div class="sys-col-wrap" style="margin-bottom:10px">
-    <div class="sys-col-label">💎 Адилхан</div>
-    <div class="sys-col-sub">партнёр — приводит клиентов</div>
     <div class="sys-node sys-blue" onclick="showDetail('cl-jewelry')" style="width:100%;margin-bottom:8px">
       <div class="sys-icon">💍</div>
       <div class="sys-name">Клиент — Ювелирка</div>
@@ -584,22 +589,6 @@
       <div class="sys-icon">🚛</div>
       <div class="sys-name">Клиент — Логистика</div>
       <div class="sys-status sys-status-red">⛔ Ждём</div>
-    </div>
-  </div>
-
-  <!-- Входящие — Родственники -->
-  <div class="sys-col-wrap">
-    <div class="sys-col-label">👥 Родственники</div>
-    <div class="sys-col-sub">Баха и Нуртлеу — пока без клиентов</div>
-    <div class="sys-node sys-muted" onclick="showDetail('baha')" style="width:100%;margin-bottom:8px">
-      <div class="sys-icon">👤</div>
-      <div class="sys-name">Баха</div>
-      <div class="sys-status sys-status-gray">Нет клиентов</div>
-    </div>
-    <div class="sys-node sys-muted" onclick="showDetail('nurtleu')" style="width:100%">
-      <div class="sys-icon">👤</div>
-      <div class="sys-name">Нуртлеу</div>
-      <div class="sys-status sys-status-gray">Нет клиентов</div>
     </div>
   </div>
 
@@ -914,6 +903,19 @@
         { text: 'Скрины + описание App Store', color: '#6366f1' },
       ]
     },
+    'wa-bot': {
+      title: '🤖 WA Bot — рассылка',
+      why: [
+        { q: 'Что делает?', a: 'Автоматическая рассылка + продажа сайтов' },
+        { q: 'Статус?', a: 'В разработке — нужно создать и автоматизировать' },
+        { q: 'Цель?', a: 'Бот сам находит клиентов, сам продаёт, без Диаса' },
+      ],
+      tasks: [
+        { text: 'Создать WA бота', color: '#fbbf24' },
+        { text: 'Автоматизировать рассылку', color: '#6366f1' },
+        { text: 'Подключить продажу сайтов', color: '#6366f1' },
+      ]
+    },
     playa: {
       title: '🪩 Playa',
       why: [{ q: 'Статус?', a: 'Отложено — сначала x5 в App Store' }],
@@ -939,16 +941,7 @@
         { text: 'Сайт задеплоен ✅', color: '#4ade80' },
       ]
     },
-    baha: {
-      title: '👤 Баха',
-      why: [{ q: 'Статус?', a: 'Родственник — пока не привёл клиентов' }],
-      tasks: [{ text: 'Ожидает — нет клиентов', color: '#94a3b8' }]
-    },
-    nurtleu: {
-      title: '👤 Нуртлеу',
-      why: [{ q: 'Статус?', a: 'Родственник — пока не привёл клиентов' }],
-      tasks: [{ text: 'Ожидает — нет клиентов', color: '#94a3b8' }]
-    },
+
   };
 
   function showDetail(key) {
