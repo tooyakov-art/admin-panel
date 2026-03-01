@@ -244,6 +244,8 @@
     .sys-col-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
     .sys-col-label { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
     .sys-col-sub { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+    .sys-openclaw-node { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1e1b4b 100%); border: 1.5px solid rgba(99,102,241,0.6); border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; box-shadow: 0 0 24px rgba(99,102,241,0.2); -webkit-tap-highlight-color: transparent; }
+    .sys-openclaw-node:active { transform: scale(0.98); }
 
     /* Detail panel */
     .map-detail { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px; display: none; }
@@ -529,6 +531,19 @@
     <div style="font-size:22px">💳</div>
     <div class="sys-center-title">КАСПИ</div>
     <div class="sys-center-sub">Основной банк</div>
+  </div>
+
+  <!-- connector -->
+  <div class="sys-connector"><div class="sys-line"></div></div>
+
+  <!-- ─── OPENCLAW ─────────────────── -->
+  <div class="sys-openclaw-node" onclick="showDetail('openclaw')">
+    <div style="font-size:28px;filter:drop-shadow(0 0 10px rgba(99,102,241,0.8));animation:morty-glow 3s ease-in-out infinite">🤖</div>
+    <div style="flex:1">
+      <div class="sys-center-title">OpenClaw</div>
+      <div class="sys-center-sub">Выполнение задач · связь с доходом</div>
+    </div>
+    <div style="font-size:10px;color:#4ade80;font-weight:600;white-space:nowrap">● online</div>
   </div>
 
   <!-- connector -->
@@ -854,6 +869,17 @@
       title: '✨ Расходы на желания',
       why: [{ q: 'Что входит?', a: 'Гаджеты, одежда, развлечения, путешествия' }],
       tasks: []
+    },
+    openclaw: {
+      title: '🤖 OpenClaw',
+      why: [
+        { q: 'Роль в системе?', a: 'Выполняет задачи, управляет воркерами, обновляет карту' },
+        { q: 'Как связан с доходом?', a: 'Каждая задача через OpenClaw → результат → деньги' },
+      ],
+      tasks: [
+        { text: 'Evil Morty — online ✅', color: '#4ade80' },
+        { text: 'Worker 1 (@x5_worker_bot) — готов', color: '#6366f1' },
+      ]
     },
     kaspi: {
       title: '💳 Каспи',
