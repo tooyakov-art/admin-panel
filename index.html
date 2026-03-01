@@ -201,6 +201,21 @@
     .map-h-line { height: 2px; background: var(--border); margin: 0 auto; width: 60%; }
     .map-line-col { display: flex; flex-direction: column; align-items: center; }
 
+    /* CHART */
+    .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin: 12px 0 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .chart-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+    .chart-nav { display: flex; align-items: center; gap: 8px; }
+    .chart-nav-btn { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted2); font-size: 13px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .chart-nav-btn:active { background: var(--accent); color: white; border-color: var(--accent); }
+    .chart-week { font-size: 12px; color: var(--muted2); }
+    .chart-total { font-size: 13px; font-weight: 700; color: var(--accent2); }
+    .chart-svg-wrap { width: 100%; overflow: hidden; }
+    .chart-days { display: flex; justify-content: space-between; margin-top: 6px; }
+    .chart-day { flex: 1; text-align: center; font-size: 10px; color: var(--muted); }
+    .chart-day.today { color: var(--accent2); font-weight: 700; }
+    .chart-day-val { font-size: 9px; color: var(--muted); margin-top: 2px; }
+
     /* Detail panel */
     .map-detail { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px; display: none; }
     .map-detail.open { display: block; animation: fadeIn 0.2s ease; }
@@ -237,6 +252,23 @@
   </div>
 
   <div style="padding-top:28px">
+
+    <!-- CHART -->
+    <div class="chart-wrap">
+      <div class="chart-header">
+        <span class="chart-label">📈 Доход</span>
+        <div class="chart-nav">
+          <div class="chart-nav-btn" onclick="chartPrev()">◀</div>
+          <span class="chart-week" id="chart-week-label">—</span>
+          <div class="chart-nav-btn" onclick="chartNext()">▶</div>
+        </div>
+      </div>
+      <div class="chart-total" id="chart-total">Итого: 0 ₸</div>
+      <div class="chart-svg-wrap">
+        <svg id="chart-svg" width="100%" height="80" viewBox="0 0 280 80" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="chart-days" id="chart-days"></div>
+    </div>
 
     <!-- СЕГОДНЯ -->
     <div class="section-title">Сегодня</div>
@@ -636,6 +668,119 @@
     cb.classList.toggle('checked');
     el.classList.toggle('done');
   }
+
+  // ── INCOME DATA ──────────────────────────────────────────────
+  // Format: 'YYYY-MM-DD': amount (₸)
+  const incomeData = {
+    '2026-02-23': 0,
+    '2026-02-24': 0,
+    '2026-02-25': 0,
+    '2026-02-26': 0,
+    '2026-02-27': 25000,
+    '2026-02-28': 15000,
+    '2026-03-01': 40000,
+  };
+
+  let chartWeekOffset = 0; // 0 = current week, -1 = prev, etc.
+
+  function getWeekDates(offset) {
+    const today = new Date();
+    const day = today.getDay() || 7; // Mon=1..Sun=7
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - day + 1 + offset * 7);
+    return Array.from({length: 7}, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return d;
+    });
+  }
+
+  function fmtKey(d) {
+    return d.toISOString().slice(0, 10);
+  }
+
+  function fmtDay(d) {
+    return ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'][d.getDay() === 0 ? 6 : d.getDay() - 1];
+  }
+
+  function fmtDate(d) {
+    return `${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}`;
+  }
+
+  function fmtK(n) {
+    if (n >= 1000) return (n/1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'к';
+    return n > 0 ? String(n) : '—';
+  }
+
+  function renderChart() {
+    const dates = getWeekDates(chartWeekOffset);
+    const todayKey = fmtKey(new Date());
+    const values = dates.map(d => incomeData[fmtKey(d)] || 0);
+    const maxVal = Math.max(...values, 1);
+    const total = values.reduce((a,b) => a+b, 0);
+
+    // Week label
+    const first = dates[0], last = dates[6];
+    document.getElementById('chart-week-label').textContent =
+      `${fmtDate(first)} – ${fmtDate(last)}`;
+    document.getElementById('chart-total').textContent =
+      `Итого: ${total.toLocaleString('ru')} ₸`;
+
+    // SVG
+    const W = 280, H = 80, padX = 18, padY = 10;
+    const innerW = W - padX * 2, innerH = H - padY * 2;
+    const step = innerW / 6;
+    const pts = values.map((v, i) => {
+      const x = padX + i * step;
+      const y = padY + innerH - (v / maxVal) * innerH;
+      return { x, y, v };
+    });
+
+    // Area path
+    let area = `M${pts[0].x},${H} `;
+    pts.forEach(p => { area += `L${p.x},${p.y} `; });
+    area += `L${pts[pts.length-1].x},${H} Z`;
+
+    // Line path
+    let line = `M${pts[0].x},${pts[0].y}`;
+    pts.slice(1).forEach(p => { line += ` L${p.x},${p.y}`; });
+
+    let svg = `
+      <defs>
+        <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="${area}" fill="url(#cg)"/>
+      <path d="${line}" fill="none" stroke="#6366f1" stroke-width="2" stroke-linejoin="round"/>
+    `;
+
+    pts.forEach((p, i) => {
+      const isToday = fmtKey(dates[i]) === todayKey;
+      const hasVal = p.v > 0;
+      svg += `<circle cx="${p.x}" cy="${p.y}" r="${isToday ? 4 : 3}"
+        fill="${isToday ? '#818cf8' : hasVal ? '#6366f1' : 'var(--border)'}"
+        stroke="${isToday ? '#1e1b4b' : 'none'}" stroke-width="2"/>`;
+    });
+
+    document.getElementById('chart-svg').innerHTML = svg;
+
+    // Day labels
+    document.getElementById('chart-days').innerHTML = dates.map((d, i) => {
+      const isToday = fmtKey(d) === todayKey;
+      return `<div class="chart-day ${isToday ? 'today' : ''}">
+        ${fmtDay(d)}<br><span style="font-size:9px;opacity:0.6">${d.getDate()}</span>
+        <div class="chart-day-val">${fmtK(values[i])}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function chartPrev() { chartWeekOffset--; renderChart(); }
+  function chartNext() { if (chartWeekOffset < 0) { chartWeekOffset++; renderChart(); } }
+
+  renderChart();
+  // ─────────────────────────────────────────────────────────────
 
   const mapData = {
     x5: {
