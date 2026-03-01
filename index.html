@@ -45,7 +45,7 @@
 
     /* NAV */
     .nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(13,13,20,0.95); border-top: 1px solid var(--border); backdrop-filter: blur(20px); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 0 8px; cursor: pointer; font-size: 10px; color: var(--muted); transition: all 0.2s; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 0 6px; cursor: pointer; font-size: 9px; color: var(--muted); transition: all 0.2s; }
     .nav-item.active { color: var(--accent2); }
     .nav-item.active .nav-icon { transform: scale(1.1); }
     .nav-icon { font-size: 20px; margin-bottom: 2px; transition: transform 0.2s; }
@@ -305,7 +305,7 @@
     </div>
   </div>
 
-  <div style="padding-top:28px">
+  <div style="padding-top:10px">
 
     <!-- CHART -->
     <div class="chart-wrap">
@@ -768,7 +768,10 @@
 <!-- BOTTOM NAV -->
 <nav class="nav">
   <div class="nav-item active" onclick="nav('home',this)"><div class="nav-icon">🏠</div><span>Главная</span></div>
-  <div class="nav-item" onclick="nav('map',this)"><div class="nav-icon">📍</div><span>Карта</span></div>
+  <div class="nav-item" onclick="nav('kanban',this)"><div class="nav-icon">📋</div><span>Задачи</span></div>
+  <div class="nav-item" onclick="nav('factory',this)"><div class="nav-icon">🏭</div><span>Фабрика</span></div>
+  <div class="nav-item" onclick="nav('map',this)"><div class="nav-icon">🗺️</div><span>Система</span></div>
+  <div class="nav-item" onclick="nav('profile',this)"><div class="nav-icon">👤</div><span>Профиль</span></div>
 </nav>
 
 <script>
