@@ -308,6 +308,84 @@
     /* Smooth transition for all pages */
     .page { opacity:0; transition:opacity 0.15s ease; }
     .page.active { opacity:1; }
+
+    /* ═══════════════════ POWER BAR ═══════════════════ */
+    .sys-layout { display:flex; gap:0; position:relative; }
+    .sys-content { flex:1; min-width:0; }
+    .power-bar {
+      width:44px; flex-shrink:0;
+      display:flex; flex-direction:column; align-items:center;
+      padding:8px 0;
+      position:sticky; top:calc(var(--safe-top) + 16px);
+      align-self:flex-start;
+      height:auto;
+    }
+    .pb-track {
+      width:4px; flex:1;
+      background:rgba(255,255,255,0.04);
+      border-radius:4px;
+      position:relative;
+      display:flex; flex-direction:column-reverse;
+      overflow:visible;
+      min-height:400px;
+    }
+    .pb-fill {
+      width:100%; border-radius:4px;
+      background:linear-gradient(to top, #22c55e 0%, #f59e0b 50%, #ef4444 100%);
+      transition:height 0.6s ease;
+      position:absolute; bottom:0; left:0;
+    }
+    .pb-level {
+      position:absolute; left:50%;
+      transform:translateX(-50%);
+      display:flex; align-items:center; justify-content:center;
+      z-index:2; cursor:pointer;
+      transition:all 0.2s;
+    }
+    .pb-level:active { transform:translateX(-50%) scale(1.2); }
+    .pb-dot {
+      width:14px; height:14px; border-radius:50%;
+      border:2px solid var(--border);
+      background:var(--card);
+      display:flex; align-items:center; justify-content:center;
+      font-size:8px;
+      transition:all 0.3s;
+    }
+    .pb-dot.active { border-color:#22c55e; background:rgba(34,197,94,0.15); box-shadow:0 0 8px rgba(34,197,94,0.3); }
+    .pb-dot.warn { border-color:#f59e0b; background:rgba(245,158,11,0.15); box-shadow:0 0 8px rgba(245,158,11,0.3); }
+    .pb-dot.blocked { border-color:#ef4444; background:rgba(239,68,68,0.15); box-shadow:0 0 8px rgba(239,68,68,0.3); }
+    .pb-dot.off { border-color:var(--border); background:var(--card2); }
+    .pb-label {
+      position:absolute;
+      right:calc(100% + 4px);
+      font-size:8px; font-weight:700;
+      color:var(--muted);
+      white-space:nowrap;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+      opacity:0;
+      transition:opacity 0.2s;
+      pointer-events:none;
+    }
+    .pb-level:hover .pb-label,
+    .pb-level:active .pb-label { opacity:1; }
+    .pb-top-label {
+      font-size:8px; font-weight:800;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:1px;
+      margin-bottom:6px;
+      writing-mode:vertical-rl;
+      text-orientation:mixed;
+      transform:rotate(180deg);
+    }
+    .pb-bottom-label {
+      font-size:8px; font-weight:800;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:1px;
+      margin-top:6px;
+    }
   </style>
 </head>
 <body>
@@ -371,6 +449,9 @@
     <div class="sys-title">🗺 Система</div>
     <div class="sys-sub">Доходы · Расходы · Инструменты</div>
   </div>
+
+  <div class="sys-layout">
+  <div class="sys-content">
 
   <!-- Расходы -->
   <div class="sys-section">
@@ -512,6 +593,49 @@
   </div>
 
   <div style="height:24px"></div>
+
+  </div><!-- /sys-content -->
+
+  <!-- POWER BAR -->
+  <div class="power-bar">
+    <div class="pb-top-label">💰</div>
+    <div class="pb-track" id="pb-track">
+      <div class="pb-fill" id="pb-fill" style="height:35%"></div>
+
+      <!-- Уровень 5: Расходы (top) -->
+      <div class="pb-level" style="bottom:92%" onclick="pbTap('expenses')">
+        <div class="pb-dot off" id="pb-expenses"></div>
+        <div class="pb-label">Расходы</div>
+      </div>
+
+      <!-- Уровень 4: Каспи -->
+      <div class="pb-level" style="bottom:72%" onclick="pbTap('kaspi')">
+        <div class="pb-dot warn" id="pb-kaspi"></div>
+        <div class="pb-label">Каспи</div>
+      </div>
+
+      <!-- Уровень 3: Доходы -->
+      <div class="pb-level" style="bottom:52%" onclick="pbTap('income')">
+        <div class="pb-dot blocked" id="pb-income"></div>
+        <div class="pb-label">Доходы</div>
+      </div>
+
+      <!-- Уровень 2: Инструменты -->
+      <div class="pb-level" style="bottom:30%" onclick="pbTap('tools')">
+        <div class="pb-dot blocked" id="pb-tools"></div>
+        <div class="pb-label">Инструм.</div>
+      </div>
+
+      <!-- Уровень 1: Энергия (bottom) -->
+      <div class="pb-level" style="bottom:8%" onclick="pbTap('energy')">
+        <div class="pb-dot active" id="pb-energy"></div>
+        <div class="pb-label">Энергия</div>
+      </div>
+    </div>
+    <div class="pb-bottom-label">⚡</div>
+  </div>
+
+  </div><!-- /sys-layout -->
 </div>
 
 <!-- ═══════════════════ NAV ═══════════════════ -->
@@ -743,6 +867,34 @@ function showDetail(key) {
 
 function closeDetail() {
   document.getElementById('map-detail').classList.remove('open');
+}
+
+// ── POWER BAR ──
+const pbLevels = {
+  energy: { section: null, label: '⚡ Энергия — Диас', status: 'active', desc: 'Источник. Работает.' },
+  tools: { section: 'openclaw', label: '🛠 Инструменты', status: 'blocked', desc: 'Правки клиента не исправлены → инструменты простаивают' },
+  income: { section: 'cl-logistic', label: '💰 Доходы', status: 'blocked', desc: 'Казах Логистик ждёт правки. x5 билд в очереди.' },
+  kaspi: { section: 'kaspi', label: '💳 Каспи', status: 'warn', desc: '80K ₸. Новых поступлений нет.' },
+  expenses: { section: 'exp-must', label: '📤 Расходы', status: 'off', desc: 'Суммы не зафиксированы.' },
+};
+
+function pbTap(key) {
+  const lvl = pbLevels[key];
+  if (!lvl) return;
+
+  // Show detail for this level
+  const panel = document.getElementById('map-detail');
+  document.getElementById('detail-title-text').textContent = lvl.label;
+  document.getElementById('detail-body').innerHTML =
+    `<div class="detail-row"><div class="detail-q">Статус</div><div class="detail-a">${lvl.desc}</div></div>`;
+  document.getElementById('detail-tasks').innerHTML = '';
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  // If has linked section, also show its detail
+  if (lvl.section && mapData[lvl.section]) {
+    showDetail(lvl.section);
+  }
 }
 </script>
 </body>
