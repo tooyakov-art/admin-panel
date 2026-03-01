@@ -2,742 +2,811 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Dias Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Money</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: #0a0a0f;
-      --card: #13131a;
-      --card2: #1c1c26;
-      --border: #23233a;
+      --bg: #08080e;
+      --card: #111118;
+      --card2: #1a1a24;
+      --border: #1e1e30;
       --accent: #6366f1;
       --accent2: #818cf8;
+      --accent-glow: rgba(99,102,241,0.15);
       --green: #22c55e;
       --yellow: #f59e0b;
       --red: #ef4444;
       --purple: #a855f7;
       --text: #f1f5f9;
-      --muted: #64748b;
-      --muted2: #94a3b8;
+      --muted: #525270;
+      --muted2: #8888a8;
+      --safe-top: 0px;
+      --safe-bottom: 0px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; overscroll-behavior: none; }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:72px; overscroll-behavior:none; -webkit-font-smoothing:antialiased; }
 
-    /* HEADER */
-    .header { background: linear-gradient(160deg, #0f0c29 0%, #1e1b4b 40%, #24243e 100%); padding: 20px 16px 16px; padding-top: calc(20px + var(--safe-top)); position: relative; overflow: hidden; }
-    .header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent); }
-    .orb { position: absolute; border-radius: 50%; filter: blur(40px); pointer-events: none; }
-    .orb1 { width: 180px; height: 180px; background: rgba(99,102,241,0.35); top: -60px; right: -40px; animation: orb-float1 6s ease-in-out infinite; }
-    .orb2 { width: 120px; height: 120px; background: rgba(168,85,247,0.25); bottom: -30px; left: -20px; animation: orb-float2 8s ease-in-out infinite; }
-    .orb3 { width: 80px; height: 80px; background: rgba(59,130,246,0.2); top: 20px; left: 40%; animation: orb-float3 5s ease-in-out infinite; }
-    @keyframes orb-float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-15px,10px) scale(1.1)} }
-    @keyframes orb-float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(10px,-15px) scale(1.15)} }
-    @keyframes orb-float3 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(8px,-8px) scale(0.9)} 66%{transform:translate(-8px,5px) scale(1.1)} }
-    .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; position: relative; z-index: 1; }
-    .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; box-shadow: 0 4px 15px rgba(99,102,241,0.4); }
-    .header-title { font-size: 20px; font-weight: 700; }
-    .header-sub { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 2px; }
-    .revenue-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 1; }
-    .revenue-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .revenue-amount { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
-    .revenue-badge { background: rgba(34,197,94,0.2); color: #4ade80; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; border: 1px solid rgba(34,197,94,0.2); }
+    /* ═══════════════════ HEADER ═══════════════════ */
+    .header {
+      background: linear-gradient(170deg, #0c0a20 0%, #151235 50%, #0f0d1f 100%);
+      padding: 20px 20px 24px;
+      padding-top: calc(20px + var(--safe-top));
+      position: relative; overflow: hidden;
+    }
+    .header::after { content:''; position:absolute; bottom:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(99,102,241,0.2), transparent); }
+    .orb { position:absolute; border-radius:50%; filter:blur(60px); pointer-events:none; opacity:0.5; }
+    .orb1 { width:200px; height:200px; background:rgba(99,102,241,0.3); top:-80px; right:-60px; animation:orb1 8s ease-in-out infinite; }
+    .orb2 { width:140px; height:140px; background:rgba(168,85,247,0.2); bottom:-50px; left:-30px; animation:orb2 10s ease-in-out infinite; }
+    @keyframes orb1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,15px)} }
+    @keyframes orb2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(15px,-20px)} }
 
-    /* NAV */
-    .nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(13,13,20,0.95); border-top: 1px solid var(--border); backdrop-filter: blur(20px); display: flex; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 0 6px; cursor: pointer; font-size: 9px; color: var(--muted); transition: all 0.2s; }
-    .nav-item.active { color: var(--accent2); }
-    .nav-item.active .nav-icon { transform: scale(1.1); }
-    .nav-icon { font-size: 20px; margin-bottom: 2px; transition: transform 0.2s; }
+    .header-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; position:relative; z-index:1; }
+    .header-info {}
+    .header-title { font-size:22px; font-weight:700; letter-spacing:-0.3px; }
+    .header-sub { font-size:13px; color:rgba(255,255,255,0.4); margin-top:3px; letter-spacing:0.2px; }
+    .avatar { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#a855f7); display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700; box-shadow:0 4px 20px rgba(99,102,241,0.35); }
 
-    /* PAGES */
-    :root { --safe-top: 0px; --safe-bottom: 0px; }
-    .page { display: none; padding: 16px; padding-top: calc(16px + var(--safe-top)); }
-    .page.active { display: block; }
-    /* Home page has its own header that handles top inset */
-    #page-home { padding: 0 !important; }
+    /* ═══════════════════ GOAL CARD ═══════════════════ */
+    .goal-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 16px 18px;
+      position: relative; z-index:1;
+    }
+    .goal-row { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px; }
+    .goal-left {}
+    .goal-label { font-size:10px; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:4px; }
+    .goal-amount { font-size:28px; font-weight:800; letter-spacing:-1px; line-height:1; }
+    .goal-right { text-align:right; }
+    .goal-target-label { font-size:10px; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:1px; font-weight:600; margin-bottom:4px; }
+    .goal-target { font-size:20px; font-weight:700; color:var(--accent2); letter-spacing:-0.5px; line-height:1; }
+    .goal-bar-wrap { height:6px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; margin-bottom:8px; }
+    .goal-bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg, #6366f1, #818cf8); transition:width 1s ease; position:relative; }
+    .goal-bar-fill::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent 60%, rgba(255,255,255,0.2)); border-radius:4px; }
+    .goal-hint { font-size:12px; color:rgba(255,255,255,0.3); text-align:center; }
+    .goal-hint b { color:rgba(255,255,255,0.55); font-weight:600; }
 
-    /* SECTIONS */
-    .section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 22px; display: flex; align-items: center; gap: 6px; }
-    .section-title:first-child { margin-top: 4px; }
-    .section-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
+    /* ═══════════════════ NAV ═══════════════════ */
+    .nav {
+      position:fixed; bottom:0; left:0; right:0;
+      background:rgba(8,8,14,0.92);
+      border-top:1px solid rgba(30,30,48,0.6);
+      backdrop-filter:blur(24px);
+      display:flex; z-index:100;
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; padding:10px 0 8px; cursor:pointer; font-size:10px; color:var(--muted); transition:color 0.2s; font-weight:500; }
+    .nav-item.active { color:var(--accent2); }
+    .nav-icon { font-size:22px; margin-bottom:2px; transition:transform 0.2s; }
+    .nav-item.active .nav-icon { transform:scale(1.08); }
 
-    /* CARDS */
-    .card { background: var(--card); border-radius: 14px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.3); transition: border-color 0.2s; }
-    .card:active { border-color: var(--accent); }
-    .card-row { display: flex; justify-content: space-between; align-items: center; }
-    .card-title { font-size: 15px; font-weight: 600; }
-    .card-sub { font-size: 13px; color: var(--muted2); margin-top: 5px; }
+    /* ═══════════════════ PAGES ═══════════════════ */
+    .page { display:none; }
+    .page.active { display:block; }
+    #page-home { padding-top:0; }
+    #page-system { padding:16px 16px 0; padding-top:calc(16px + var(--safe-top)); }
 
-    /* BADGES */
-    .badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; }
-    .badge-blue { background: rgba(99,102,241,0.15); color: #818cf8; }
-    .badge-green { background: rgba(34,197,94,0.15); color: #4ade80; }
-    .badge-yellow { background: rgba(245,158,11,0.15); color: #fbbf24; }
-    .badge-gray { background: rgba(100,116,139,0.12); color: var(--muted); }
-    .badge-purple { background: rgba(168,85,247,0.15); color: #c084fc; }
+    /* ═══════════════════ CONTENT AREA ═══════════════════ */
+    .content { padding:0 16px; }
 
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .stat-card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
-    .stat-value { font-size: 22px; font-weight: 800; margin-bottom: 2px; letter-spacing: -0.5px; }
-    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
+    /* ═══════════════════ CHART ═══════════════════ */
+    .chart-card {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px 18px 14px;
+      margin-top:16px;
+    }
+    .chart-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+    .chart-label { font-size:12px; font-weight:700; color:var(--muted2); display:flex; align-items:center; gap:6px; }
+    .chart-nav { display:flex; align-items:center; gap:6px; }
+    .chart-nav-btn { background:var(--card2); border:1px solid var(--border); border-radius:8px; color:var(--muted2); font-size:11px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s; }
+    .chart-nav-btn:active { background:var(--accent); color:white; border-color:var(--accent); }
+    .chart-week { font-size:12px; color:var(--muted2); font-weight:500; }
+    .chart-total { font-size:15px; font-weight:700; color:var(--text); margin-bottom:10px; }
+    .chart-total span { color:var(--accent2); }
+    .chart-svg-wrap { width:100%; overflow:hidden; }
+    .chart-days { display:flex; justify-content:space-between; margin-top:8px; }
+    .chart-day { flex:1; text-align:center; font-size:10px; color:var(--muted); font-weight:500; }
+    .chart-day.today { color:var(--accent2); font-weight:700; }
+    .chart-day-name { margin-bottom:1px; }
+    .chart-day-num { font-size:9px; opacity:0.6; margin-bottom:2px; }
+    .chart-day-val { font-size:9px; color:var(--muted); }
 
-    /* KANBAN */
-    .kanban-col { margin-bottom: 20px; }
-    .kanban-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-    .kanban-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .kanban-col-title { font-size: 14px; font-weight: 600; }
-    .kanban-count { background: var(--card2); color: var(--muted); font-size: 11px; padding: 2px 7px; border-radius: 10px; }
-    .task-card { background: var(--card); border-radius: 12px; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-left: 3px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .task-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-    .task-meta { font-size: 12px; color: var(--muted); }
+    /* ═══════════════════ SECTIONS ═══════════════════ */
+    .section-title {
+      font-size:11px; font-weight:700; color:var(--muted);
+      text-transform:uppercase; letter-spacing:1.2px;
+      margin:24px 0 10px; display:flex; align-items:center; gap:7px;
+    }
+    .section-title::before { content:''; width:3px; height:11px; background:var(--accent); border-radius:2px; }
 
-    /* TODAY TASKS */
-    .todo-item { background: var(--card); border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color 0.2s; }
-    .todo-item:active { border-color: var(--accent); }
-    .todo-cb { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
-    .todo-cb.checked { background: var(--accent); border-color: var(--accent); }
-    .todo-cb.checked::after { content: '✓'; color: white; font-size: 12px; font-weight: 700; }
-    .todo-text { flex: 1; }
-    .todo-title { font-size: 14px; font-weight: 500; }
-    .todo-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .todo-item.done .todo-title { text-decoration: line-through; color: var(--muted); }
+    /* ═══════════════════ TODO ITEMS ═══════════════════ */
+    .todo-item {
+      background:var(--card);
+      border-radius:14px;
+      padding:14px 16px;
+      margin-bottom:8px;
+      border:1px solid var(--border);
+      display:flex; align-items:center; gap:12px;
+      cursor:pointer; transition:all 0.15s;
+    }
+    .todo-item:active { border-color:rgba(99,102,241,0.3); background:rgba(17,17,24,0.8); }
+    .todo-cb { width:20px; height:20px; border-radius:7px; border:2px solid rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all 0.2s; }
+    .todo-cb.checked { background:var(--accent); border-color:var(--accent); }
+    .todo-cb.checked::after { content:'✓'; color:white; font-size:11px; font-weight:700; }
+    .todo-text { flex:1; min-width:0; }
+    .todo-title { font-size:14px; font-weight:600; line-height:1.3; }
+    .todo-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+    .todo-item.done .todo-title { text-decoration:line-through; color:var(--muted); }
+    .badge { font-size:10px; font-weight:600; padding:3px 8px; border-radius:6px; flex-shrink:0; }
+    .badge-fire { background:rgba(239,68,68,0.12); color:#f87171; }
+    .badge-purple { background:rgba(168,85,247,0.12); color:#c084fc; }
+    .badge-wait { background:rgba(245,158,11,0.12); color:#fbbf24; }
 
-    /* TEAM */
-    .team-item { background: var(--card); border-radius: 12px; padding: 13px 14px; margin-bottom: 8px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; }
-    .team-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-    .team-icon-morty { background: linear-gradient(135deg, #312e81, #6366f1); }
-    .team-icon-w1 { background: linear-gradient(135deg, #065f46, #059669); }
-    .team-icon-w2 { background: linear-gradient(135deg, #7c2d12, #ea580c); }
-    .team-info { flex: 1; }
-    .team-name { font-size: 14px; font-weight: 600; }
-    .team-handle { font-size: 12px; color: var(--muted); margin-top: 1px; }
-    .team-status { font-size: 12px; font-weight: 500; }
+    /* ═══════════════════ STATS ═══════════════════ */
+    .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .stat-card {
+      background:var(--card);
+      border-radius:14px;
+      padding:14px 16px;
+      border:1px solid var(--border);
+    }
+    .stat-value { font-size:22px; font-weight:800; letter-spacing:-0.5px; margin-bottom:2px; }
+    .stat-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; }
 
-    /* STATUS */
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-    .expo-row { display: flex; align-items: center; gap: 10px; padding: 13px 14px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; }
+    /* ═══════════════════ TEAM ═══════════════════ */
+    .team-item {
+      background:var(--card);
+      border-radius:14px;
+      padding:13px 16px;
+      margin-bottom:8px;
+      border:1px solid var(--border);
+      display:flex; align-items:center; gap:12px;
+    }
+    .team-icon { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .team-icon-morty { background:linear-gradient(135deg,#1e1b4b,#312e81); }
+    .team-icon-w1 { background:linear-gradient(135deg,#052e16,#166534); }
+    .team-icon-w2 { background:linear-gradient(135deg,#3b0764,#7e22ce); }
+    .team-info { flex:1; }
+    .team-name { font-size:14px; font-weight:600; }
+    .team-role { font-size:11px; color:var(--muted); margin-top:1px; }
+    .team-status { font-size:11px; font-weight:600; }
 
-    /* PROFILE */
-    .profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; margin: 0 auto 12px; box-shadow: 0 8px 24px rgba(99,102,241,0.35); }
-    .profile-name { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-    .profile-role { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; }
-    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-    .info-row:last-child { border-bottom: none; }
-    .info-key { color: var(--muted); }
-    .info-val { font-weight: 500; }
+    /* ═══════════════════ SYSTEM PAGE ═══════════════════ */
+    .sys-header { text-align:center; padding:8px 0 20px; }
+    .sys-title { font-size:20px; font-weight:800; letter-spacing:-0.3px; }
+    .sys-sub { font-size:12px; color:var(--muted); margin-top:4px; }
 
-    /* DIVIDER */
-    .divider { height: 1px; background: var(--border); margin: 4px 0 14px; }
+    /* Center node */
+    .sys-center {
+      background:linear-gradient(135deg, #0f1a30 0%, #162040 50%, #0f1a30 100%);
+      border:1.5px solid rgba(99,102,241,0.3);
+      border-radius:18px;
+      padding:18px 20px;
+      display:flex; align-items:center; gap:14px;
+      cursor:pointer;
+      box-shadow:0 0 30px rgba(99,102,241,0.08);
+      margin-bottom:16px;
+      transition:transform 0.15s;
+    }
+    .sys-center:active { transform:scale(0.98); }
+    .sys-center-icon { font-size:28px; }
+    .sys-center-info {}
+    .sys-center-name { font-size:17px; font-weight:800; letter-spacing:0.3px; }
+    .sys-center-desc { font-size:12px; color:var(--muted2); margin-top:2px; }
+    .sys-center-badge { margin-left:auto; font-size:10px; font-weight:600; padding:4px 10px; border-radius:20px; background:rgba(34,197,94,0.15); color:#4ade80; }
 
-    /* FACTORY PAGE */
-    .factory-header { text-align: center; padding: 16px 0 8px; }
-    .factory-title { font-size: 18px; font-weight: 800; letter-spacing: 1px; color: #a78bfa; text-shadow: 0 0 12px rgba(167,139,250,0.5); }
-    .factory-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    /* Connector */
+    .sys-connector { display:flex; justify-content:center; margin:12px 0; }
+    .sys-line { width:2px; height:24px; background:linear-gradient(to bottom, rgba(99,102,241,0.4), rgba(99,102,241,0.1)); border-radius:2px; }
+    .sys-line-h { height:2px; flex:1; background:linear-gradient(90deg, rgba(99,102,241,0.1), rgba(99,102,241,0.3), rgba(99,102,241,0.1)); border-radius:2px; margin:0 20px; }
 
-    /* Command Center */
-    .cmd-center { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1e1b4b 100%); border: 1px solid rgba(99,102,241,0.4); border-radius: 18px; padding: 20px; margin-bottom: 14px; box-shadow: 0 0 24px rgba(99,102,241,0.2); position: relative; overflow: hidden; }
-    .cmd-center::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(99,102,241,0.04) 24px, rgba(99,102,241,0.04) 25px), repeating-linear-gradient(90deg, transparent, transparent 24px, rgba(99,102,241,0.04) 24px, rgba(99,102,241,0.04) 25px); pointer-events: none; }
-    .cmd-morty { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
-    .morty-screen { font-size: 48px; line-height: 1; filter: drop-shadow(0 0 12px rgba(99,102,241,0.8)); animation: morty-glow 3s ease-in-out infinite; }
-    @keyframes morty-glow { 0%,100%{filter:drop-shadow(0 0 12px rgba(99,102,241,0.8))} 50%{filter:drop-shadow(0 0 20px rgba(167,139,250,1))} }
-    .morty-label { font-size: 14px; font-weight: 700; color: #a78bfa; margin-top: 8px; }
-    .morty-status { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; color: #4ade80; }
-    .morty-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; animation: pulse 2s infinite; }
-    .cmd-screen-art { font-family: monospace; font-size: 10px; color: rgba(99,102,241,0.6); margin-top: 10px; line-height: 1.4; text-align: center; letter-spacing: 1px; }
+    /* Section containers */
+    .sys-section {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      margin-bottom:12px;
+    }
+    .sys-section-label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1.2px; margin-bottom:12px; display:flex; align-items:center; gap:7px; }
+    .sys-section-label::before { content:''; width:3px; height:11px; border-radius:2px; }
+    .sys-section-label.income::before { background:var(--green); }
+    .sys-section-label.expense::before { background:var(--red); }
+    .sys-section-label.tools::before { background:var(--purple); }
 
-    /* Workers */
-    .workers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-    .worker-card { background: var(--card); border-radius: 14px; padding: 14px; border: 1px solid var(--border); position: relative; overflow: hidden; transition: border-color 0.3s; }
-    .worker-card.busy { border-color: rgba(99,102,241,0.5); box-shadow: 0 0 16px rgba(99,102,241,0.12); }
-    .worker-card.idle { border-color: var(--border); }
-    .worker-avatar { font-size: 30px; text-align: center; margin-bottom: 6px; }
-    .worker-name { font-size: 13px; font-weight: 700; text-align: center; }
-    .worker-handle { font-size: 10px; color: var(--muted); text-align: center; margin-bottom: 8px; }
-    .worker-task { font-size: 11px; color: var(--muted2); background: var(--card2); border-radius: 8px; padding: 6px 8px; margin-bottom: 8px; min-height: 36px; line-height: 1.4; }
-    .worker-task.active-task { color: #c4b5fd; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); }
-    .progress-bar-wrap { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
-    .progress-bar-fill.p-active { background: linear-gradient(90deg, #6366f1, #a78bfa); box-shadow: 0 0 8px rgba(99,102,241,0.6); animation: progress-glow 2s ease-in-out infinite; }
-    .progress-bar-fill.p-idle { background: var(--muted); }
-    @keyframes progress-glow { 0%,100%{box-shadow:0 0 4px rgba(99,102,241,0.4)} 50%{box-shadow:0 0 12px rgba(167,139,250,0.8)} }
-    .progress-label { font-size: 10px; color: var(--muted); text-align: right; margin-top: 3px; }
+    /* Nodes */
+    .sys-node {
+      border-radius:14px;
+      padding:12px 14px;
+      margin-bottom:8px;
+      display:flex; align-items:center; gap:12px;
+      cursor:pointer; transition:all 0.15s;
+      border:1px solid transparent;
+    }
+    .sys-node:last-child { margin-bottom:0; }
+    .sys-node:active { transform:scale(0.98); }
+    .sys-node-icon { font-size:20px; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .sys-node-info { flex:1; min-width:0; }
+    .sys-node-name { font-size:14px; font-weight:600; }
+    .sys-node-desc { font-size:11px; color:var(--muted); margin-top:1px; }
+    .sys-node-badge { font-size:10px; font-weight:600; padding:3px 8px; border-radius:20px; flex-shrink:0; }
 
-    /* Worker status badge */
-    .worker-badge { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; display: inline-block; margin-bottom: 6px; }
-    .worker-badge.wbusy { background: rgba(99,102,241,0.2); color: #818cf8; }
-    .worker-badge.widle { background: rgba(100,116,139,0.12); color: var(--muted); }
+    .node-green { background:rgba(34,197,94,0.06); border-color:rgba(34,197,94,0.15); }
+    .node-green .sys-node-icon { background:rgba(34,197,94,0.12); }
+    .node-green .sys-node-badge { background:rgba(34,197,94,0.15); color:#4ade80; }
 
-    /* Activity Log */
-    .log-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
-    .log-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .log-title::before { content: ''; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
-    .log-entry { font-size: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); line-height: 1.5; color: var(--muted2); display: flex; gap: 8px; align-items: flex-start; }
-    .log-entry:last-child { border-bottom: none; }
-    .log-entry .log-who { color: #a78bfa; font-weight: 600; white-space: nowrap; }
-    .log-entry .log-arrow { color: var(--muted); }
-    .log-entry .log-msg { flex: 1; }
-    .log-time { font-size: 10px; color: var(--muted); white-space: nowrap; }
+    .node-yellow { background:rgba(245,158,11,0.06); border-color:rgba(245,158,11,0.15); }
+    .node-yellow .sys-node-icon { background:rgba(245,158,11,0.12); }
+    .node-yellow .sys-node-badge { background:rgba(245,158,11,0.15); color:#fbbf24; }
 
-    /* Scan line animation on cmd center */
-    .scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent); animation: scan 4s linear infinite; pointer-events: none; z-index: 2; }
-    @keyframes scan { 0%{top:-2px;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
+    .node-red { background:rgba(239,68,68,0.06); border-color:rgba(239,68,68,0.15); }
+    .node-red .sys-node-icon { background:rgba(239,68,68,0.12); }
+    .node-red .sys-node-badge { background:rgba(239,68,68,0.15); color:#f87171; }
 
-    /* MAP PAGE */
-    .map-header { text-align: center; padding: 12px 0 16px; }
-    .map-title { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; }
-    .map-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
-    .map-canvas { position: relative; width: 100%; min-height: 480px; }
-    .map-center { display: flex; justify-content: center; margin-bottom: 24px; }
-    .map-node { border-radius: 16px; padding: 12px 16px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; user-select: none; -webkit-tap-highlight-color: transparent; }
-    .map-node:active { transform: scale(0.96); }
-    .map-node-root { background: linear-gradient(135deg, #312e81, #6366f1); border: 2px solid rgba(99,102,241,0.6); box-shadow: 0 0 24px rgba(99,102,241,0.35); min-width: 120px; }
-    .map-node-green { background: rgba(34,197,94,0.12); border: 1.5px solid rgba(34,197,94,0.4); }
-    .map-node-red { background: rgba(239,68,68,0.12); border: 1.5px solid rgba(239,68,68,0.4); }
-    .map-node-yellow { background: rgba(245,158,11,0.12); border: 1.5px solid rgba(245,158,11,0.4); }
-    .map-node-title { font-size: 13px; font-weight: 700; }
-    .map-node-sub { font-size: 11px; opacity: 0.7; margin-top: 2px; }
-    .map-node-status { font-size: 10px; font-weight: 600; margin-top: 6px; padding: 2px 8px; border-radius: 20px; display: inline-block; }
-    .map-status-green { background: rgba(34,197,94,0.2); color: #4ade80; }
-    .map-status-red { background: rgba(239,68,68,0.2); color: #f87171; }
-    .map-status-yellow { background: rgba(245,158,11,0.2); color: #fbbf24; }
-    .map-connector { display: flex; justify-content: center; }
-    .map-line-v { width: 2px; height: 20px; background: var(--border); }
-    .map-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-    .map-row-lines { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 0; }
-    .map-h-line { height: 2px; background: var(--border); margin: 0 auto; width: 60%; }
-    .map-line-col { display: flex; flex-direction: column; align-items: center; }
+    .node-blue { background:rgba(99,102,241,0.06); border-color:rgba(99,102,241,0.15); }
+    .node-blue .sys-node-icon { background:rgba(99,102,241,0.12); }
+    .node-blue .sys-node-badge { background:rgba(99,102,241,0.15); color:#818cf8; }
 
-    /* CHART */
-    .chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px 16px; margin: 6px 0 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
-    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .chart-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-    .chart-nav { display: flex; align-items: center; gap: 8px; }
-    .chart-nav-btn { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; color: var(--muted2); font-size: 13px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .chart-nav-btn:active { background: var(--accent); color: white; border-color: var(--accent); }
-    .chart-week { font-size: 12px; color: var(--muted2); }
-    .chart-total { font-size: 13px; font-weight: 700; color: var(--accent2); }
-    .chart-svg-wrap { width: 100%; overflow: hidden; }
-    .chart-days { display: flex; justify-content: space-between; margin-top: 6px; }
-    .chart-day { flex: 1; text-align: center; font-size: 10px; color: var(--muted); }
-    .chart-day.today { color: var(--accent2); font-weight: 700; }
-    .chart-day-val { font-size: 9px; color: var(--muted); margin-top: 2px; }
+    .node-purple { background:rgba(168,85,247,0.06); border-color:rgba(168,85,247,0.15); }
+    .node-purple .sys-node-icon { background:rgba(168,85,247,0.12); }
+    .node-purple .sys-node-badge { background:rgba(168,85,247,0.15); color:#c084fc; }
 
-    /* SYSTEM MAP */
-    .sys-section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 4px 0 10px; display: flex; align-items: center; gap: 6px; }
-    .sys-section-label::before { content:''; width:3px; height:12px; background:var(--accent); border-radius:2px; }
-    .sys-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 0; }
-    .sys-node { border-radius: 14px; padding: 12px 8px; text-align: center; cursor: pointer; transition: transform 0.15s; -webkit-tap-highlight-color: transparent; border: 1.5px solid transparent; }
-    .sys-node:active { transform: scale(0.95); }
-    .sys-icon { font-size: 20px; margin-bottom: 4px; }
-    .sys-name { font-size: 12px; font-weight: 600; line-height: 1.3; }
-    .sys-status { font-size: 10px; font-weight: 600; margin-top: 6px; padding: 2px 6px; border-radius: 20px; display: inline-block; }
-    .sys-status-green { background: rgba(34,197,94,0.2); color: #4ade80; }
-    .sys-status-yellow { background: rgba(245,158,11,0.2); color: #fbbf24; }
-    .sys-status-red { background: rgba(239,68,68,0.2); color: #f87171; }
-    .sys-status-gray { background: rgba(100,116,139,0.15); color: var(--muted); }
-    .sys-red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); }
-    .sys-purple { background: rgba(168,85,247,0.1); border-color: rgba(168,85,247,0.3); }
-    .sys-yellow { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); }
-    .sys-green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); }
-    .sys-blue { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); }
-    .sys-muted { background: var(--card2); border-color: var(--border); }
-    .sys-connector { display: flex; justify-content: center; margin: 10px 0; }
-    .sys-line { width: 2px; height: 28px; background: linear-gradient(to bottom, var(--accent), var(--border)); border-radius: 2px; }
-    .sys-center-node { background: linear-gradient(135deg, #1e3a5f, #1e4080); border: 1.5px solid rgba(99,102,241,0.5); border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; box-shadow: 0 0 20px rgba(99,102,241,0.15); -webkit-tap-highlight-color: transparent; }
-    .sys-center-node:active { transform: scale(0.98); }
-    .sys-center-title { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; }
-    .sys-center-sub { font-size: 12px; color: var(--muted2); margin-top: 2px; }
-    .sys-col-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
-    .sys-col-label { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
-    .sys-col-sub { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
-    .sys-openclaw-node { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #1e1b4b 100%); border: 1.5px solid rgba(99,102,241,0.6); border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; box-shadow: 0 0 24px rgba(99,102,241,0.2); -webkit-tap-highlight-color: transparent; }
-    .sys-openclaw-node:active { transform: scale(0.98); }
+    .node-muted { background:rgba(82,82,112,0.06); border-color:rgba(82,82,112,0.15); }
+    .node-muted .sys-node-icon { background:rgba(82,82,112,0.12); }
+    .node-muted .sys-node-badge { background:rgba(82,82,112,0.15); color:var(--muted2); }
 
-    /* ENERGY */
-    .energy-node { position: relative; display: flex; justify-content: center; margin: 4px 0 20px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .energy-pulse { position: absolute; inset: -12px; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,0.15) 0%, transparent 70%); animation: energy-breathe 2.5s ease-in-out infinite; }
-    @keyframes energy-breathe { 0%,100%{transform:scale(0.9);opacity:0.6} 50%{transform:scale(1.1);opacity:1} }
-    .energy-inner { background: linear-gradient(135deg, #3d2a00, #78350f); border: 1.5px solid rgba(251,191,36,0.5); border-radius: 50%; width: 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; box-shadow: 0 0 30px rgba(251,191,36,0.25); position: relative; z-index: 1; }
-    .energy-title { font-size: 13px; font-weight: 800; color: #fbbf24; letter-spacing: 1px; }
-    .energy-sub { font-size: 10px; color: rgba(251,191,36,0.6); text-align: center; }
-    .energy-flow { display: flex; flex-direction: column; align-items: center; gap: 3px; height: 40px; justify-content: center; }
-    .energy-dot { width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; box-shadow: 0 0 6px #fbbf24; animation: flow-up 1.2s ease-in-out infinite; opacity: 0; }
-    @keyframes flow-up { 0%{transform:translateY(12px);opacity:0} 30%{opacity:1} 70%{opacity:1} 100%{transform:translateY(-12px);opacity:0} }
+    /* Energy circle */
+    .energy-wrap { display:flex; justify-content:center; margin:20px 0 8px; }
+    .energy-circle {
+      width:100px; height:100px;
+      border-radius:50%;
+      background:linear-gradient(135deg, #2a1a00, #422d05);
+      border:1.5px solid rgba(251,191,36,0.35);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      box-shadow:0 0 40px rgba(251,191,36,0.12);
+      cursor:pointer;
+      animation:energy-breathe 3s ease-in-out infinite;
+    }
+    @keyframes energy-breathe { 0%,100%{box-shadow:0 0 30px rgba(251,191,36,0.1)} 50%{box-shadow:0 0 50px rgba(251,191,36,0.2)} }
+    .energy-icon { font-size:28px; }
+    .energy-label { font-size:11px; font-weight:800; color:#fbbf24; letter-spacing:1px; margin-top:2px; }
+    .energy-sub { font-size:9px; color:rgba(251,191,36,0.5); }
+
+    /* Energy dots */
+    .energy-dots { display:flex; flex-direction:column; align-items:center; gap:4px; height:32px; justify-content:center; }
+    .energy-dot { width:5px; height:5px; border-radius:50%; background:#fbbf24; box-shadow:0 0 6px #fbbf24; animation:edot 1.5s ease-in-out infinite; opacity:0; }
+    @keyframes edot { 0%{transform:translateY(8px);opacity:0} 40%{opacity:1} 60%{opacity:1} 100%{transform:translateY(-8px);opacity:0} }
 
     /* Detail panel */
-    .map-detail { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 16px; display: none; }
-    .map-detail.open { display: block; animation: fadeIn 0.2s ease; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .map-detail-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .why-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-    .why-item:last-child { border-bottom: none; }
-    .why-num { color: var(--accent2); font-weight: 700; min-width: 18px; }
-    .why-text { color: var(--muted2); }
-    .map-tasks { margin-top: 10px; }
-    .map-task-item { background: var(--card2); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
-    .map-task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .detail-panel {
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      margin-top:16px;
+      display:none;
+      animation:slideUp 0.2s ease;
+    }
+    .detail-panel.open { display:block; }
+    @keyframes slideUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .detail-title { font-size:16px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .detail-close { margin-left:auto; width:28px; height:28px; border-radius:8px; background:var(--card2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; color:var(--muted); }
+    .detail-close:active { background:var(--accent); color:white; }
+    .detail-row { padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+    .detail-row:last-child { border-bottom:none; }
+    .detail-q { font-weight:600; color:var(--text); margin-bottom:2px; font-size:12px; }
+    .detail-a { color:var(--muted2); font-size:12px; }
+    .detail-tasks-label { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin:12px 0 8px; }
+    .detail-task { background:var(--card2); border-radius:10px; padding:10px 12px; margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:8px; }
+    .detail-task-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+    /* Smooth transition for all pages */
+    .page { opacity:0; transition:opacity 0.15s ease; }
+    .page.active { opacity:1; }
   </style>
 </head>
 <body>
 
-<!-- HOME PAGE -->
+<!-- ═══════════════════ HOME ═══════════════════ -->
 <div id="page-home" class="page active">
   <div class="header">
     <div class="orb orb1"></div>
     <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
     <div class="header-top">
-      <div>
+      <div class="header-info">
         <div class="header-title">Привет, Диас 👋</div>
         <div class="header-sub">Астана · Founder</div>
       </div>
       <div class="avatar">Д</div>
     </div>
-    <div class="revenue-card" style="flex-direction:column;gap:10px">
-      <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
-        <div>
-          <div class="revenue-label">Сегодня</div>
-          <div class="revenue-amount" style="font-size:22px">0 ₸</div>
+    <div class="goal-card">
+      <div class="goal-row">
+        <div class="goal-left">
+          <div class="goal-label">Сегодня</div>
+          <div class="goal-amount" id="goal-today">0 ₸</div>
         </div>
-        <div style="text-align:right">
-          <div class="revenue-label">Цель</div>
-          <div style="font-size:18px;font-weight:800;color:#fbbf24">1,000,000 ₸</div>
+        <div class="goal-right">
+          <div class="goal-target-label">Цель</div>
+          <div class="goal-target">1,000,000 ₸</div>
         </div>
       </div>
-      <div style="width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden">
-        <div style="width:8%;height:100%;background:linear-gradient(90deg,#6366f1,#a78bfa);border-radius:3px;box-shadow:0 0 8px rgba(99,102,241,0.6)"></div>
+      <div class="goal-bar-wrap">
+        <div class="goal-bar-fill" id="goal-bar" style="width:8%"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,0.4)">
-        <span>80K ₸ заработано</span>
-        <span>8% от цели</span>
-      </div>
+      <div class="goal-hint"><b>80K ₸</b> заработано · <b>8%</b> от цели</div>
     </div>
   </div>
 
-  <div style="padding:0">
-
-    <!-- CHART -->
-    <div class="chart-wrap">
-      <div class="chart-header">
-        <span class="chart-label">📈 Доход</span>
+  <div class="content">
+    <!-- Chart -->
+    <div class="chart-card">
+      <div class="chart-top">
+        <span class="chart-label">📈 доход</span>
         <div class="chart-nav">
           <div class="chart-nav-btn" onclick="chartPrev()">◀</div>
           <span class="chart-week" id="chart-week-label">—</span>
           <div class="chart-nav-btn" onclick="chartNext()">▶</div>
         </div>
       </div>
-      <div class="chart-total" id="chart-total">Итого: 0 ₸</div>
+      <div class="chart-total" id="chart-total">Итого: <span>0 ₸</span></div>
       <div class="chart-svg-wrap">
-        <svg id="chart-svg" width="100%" height="80" viewBox="0 0 280 80" preserveAspectRatio="none"></svg>
+        <svg id="chart-svg" width="100%" height="90" viewBox="0 0 280 90" preserveAspectRatio="none"></svg>
       </div>
       <div class="chart-days" id="chart-days"></div>
     </div>
 
+    <!-- Задачи -->
+    <div class="section-title">Задачи</div>
 
+    <div class="todo-item" onclick="toggleTodo(this)">
+      <div class="todo-cb"></div>
+      <div class="todo-text">
+        <div class="todo-title">Jewelry: сайт-визитка</div>
+        <div class="todo-sub">Дизайн + разработка</div>
+      </div>
+      <span class="badge badge-fire">🔥</span>
+    </div>
+    <div class="todo-item" onclick="toggleTodo(this)">
+      <div class="todo-cb"></div>
+      <div class="todo-text">
+        <div class="todo-title">Казах Логистик: правки</div>
+        <div class="todo-sub">Ждём от клиента</div>
+      </div>
+      <span class="badge badge-wait">⏳</span>
+    </div>
+    <div class="todo-item" onclick="toggleTodo(this)">
+      <div class="todo-cb"></div>
+      <div class="todo-text">
+        <div class="todo-title">x5: App Store билд</div>
+        <div class="todo-sub">EAS Build #12</div>
+      </div>
+      <span class="badge badge-purple">⚙️</span>
+    </div>
+
+    <!-- Статистика -->
+    <div class="section-title">Статистика</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value" style="color:var(--green)">80K ₸</div><div class="stat-label">Заработано</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:var(--accent2)">3</div><div class="stat-label">Проектов</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:var(--yellow)">2</div><div class="stat-label">В работе</div></div>
+      <div class="stat-card"><div class="stat-value" style="color:var(--purple)">3</div><div class="stat-label">Агентов</div></div>
+    </div>
+
+    <!-- Команда -->
+    <div class="section-title">Команда</div>
+    <div class="team-item">
+      <div class="team-icon team-icon-morty">🤖</div>
+      <div class="team-info">
+        <div class="team-name">Evil Morty</div>
+        <div class="team-role">Контроллер · @testDiss21bot</div>
+      </div>
+      <div class="team-status" style="color:var(--green)">●</div>
+    </div>
+    <div class="team-item">
+      <div class="team-icon team-icon-w1">⚡</div>
+      <div class="team-info">
+        <div class="team-name">Worker 1</div>
+        <div class="team-role">x5 · @x5_worker_bot</div>
+      </div>
+      <div class="team-status" style="color:var(--green)">●</div>
+    </div>
+    <div class="team-item">
+      <div class="team-icon team-icon-w2">💎</div>
+      <div class="team-info">
+        <div class="team-name">Worker 2</div>
+        <div class="team-role">Jewelry · @jewelry_worker_bot</div>
+      </div>
+      <div class="team-status" style="color:var(--yellow)">●</div>
+    </div>
+
+    <div style="height:20px"></div>
   </div>
 </div>
 
-<!-- MAP PAGE -->
-<div id="page-map" class="page">
-  <div class="map-header">
-    <div class="map-title">📍 Карта системы</div>
-    <div class="map-sub">Расходы → Каспи → Доходы</div>
+<!-- ═══════════════════ SYSTEM ═══════════════════ -->
+<div id="page-system" class="page">
+  <div class="sys-header">
+    <div class="sys-title">🗺 Система</div>
+    <div class="sys-sub">Доходы · Расходы · Инструменты</div>
   </div>
 
-  <!-- ─── РАСХОДЫ ─────────────────── -->
-  <div class="sys-section-label">📤 РАСХОДЫ</div>
-  <div class="sys-row">
-    <div class="sys-node sys-red" onclick="showDetail('exp-must')">
-      <div class="sys-icon">🏠</div>
-      <div class="sys-name">Обязательные</div>
-      <div class="sys-status sys-status-red" id="exp-must-val">—</div>
+  <!-- Каспи — центральный узел -->
+  <div class="sys-center" onclick="showDetail('kaspi')">
+    <div class="sys-center-icon">💳</div>
+    <div class="sys-center-info">
+      <div class="sys-center-name">КАСПИ</div>
+      <div class="sys-center-desc">Основной банк · все потоки</div>
     </div>
-    <div class="sys-node sys-purple" onclick="showDetail('exp-biz')">
-      <div class="sys-icon">📈</div>
-      <div class="sys-name">На бизнес</div>
-      <div class="sys-status sys-status-gray" id="exp-biz-val">—</div>
-    </div>
-    <div class="sys-node sys-yellow" onclick="showDetail('exp-wish')">
-      <div class="sys-icon">✨</div>
-      <div class="sys-name">На желания</div>
-      <div class="sys-status sys-status-yellow" id="exp-wish-val">10%</div>
-    </div>
+    <div class="sys-center-badge">80K ₸</div>
   </div>
 
-  <!-- connector -->
-  <div class="sys-connector"><div class="sys-line"></div></div>
+  <!-- Доходы -->
+  <div class="sys-section">
+    <div class="sys-section-label income">Доходы</div>
 
-  <!-- ─── КАСПИ ─────────────────── -->
-  <div class="sys-center-node" onclick="showDetail('kaspi')">
-    <div style="font-size:22px">💳</div>
-    <div class="sys-center-title">КАСПИ</div>
-    <div class="sys-center-sub">Основной банк</div>
-  </div>
-
-  <!-- connector -->
-  <div class="sys-connector"><div class="sys-line"></div></div>
-
-  <!-- ─── ДОХОДЫ ─────────────────── -->
-  <div class="sys-section-label">💰 ДОХОДЫ</div>
-
-  <!-- Мой бизнес -->
-  <div class="sys-col-wrap" style="margin-bottom:10px">
-    <div class="sys-col-label">🏢 Мой бизнес</div>
-    <div class="sys-col-sub">автоматизация · рассылка · продажа сайтов</div>
-    <div class="sys-node sys-green" onclick="showDetail('wa-bot')" style="width:100%">
-      <div class="sys-icon">🤖</div>
-      <div class="sys-name">WA Bot — рассылка</div>
-      <div class="sys-status sys-status-yellow">⚠ В разработке</div>
+    <div class="sys-node node-green" onclick="showDetail('cl-jewelry')">
+      <div class="sys-node-icon">💍</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">Ювелирка</div>
+        <div class="sys-node-desc">Через Адилхана · активен</div>
+      </div>
+      <div class="sys-node-badge">✓ Active</div>
     </div>
-  </div>
 
-  <!-- Адилхан -->
-  <div class="sys-col-wrap">
-    <div class="sys-col-label">💎 Адилхан</div>
-    <div class="sys-col-sub">партнёр — все клиенты через него</div>
-    <div class="sys-node sys-blue" onclick="showDetail('x5')" style="width:100%;margin-bottom:8px">
-      <div class="sys-icon">⚡</div>
-      <div class="sys-name">x5 Marketing</div>
-      <div class="sys-status sys-status-yellow">⏳ Ждём Apple Connect</div>
+    <div class="sys-node node-red" onclick="showDetail('cl-logistic')">
+      <div class="sys-node-icon">🚛</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">Казах Логистик</div>
+        <div class="sys-node-desc">Ждём правки от клиента</div>
+      </div>
+      <div class="sys-node-badge">⏳ Ждём</div>
     </div>
-    <div class="sys-node sys-muted" onclick="showDetail('playa')" style="width:100%;margin-bottom:8px">
-      <div class="sys-icon">🪩</div>
-      <div class="sys-name">Playa</div>
-      <div class="sys-status sys-status-gray">Отложено</div>
+
+    <div class="sys-node node-yellow" onclick="showDetail('x5')">
+      <div class="sys-node-icon">⚡</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">x5 Marketing</div>
+        <div class="sys-node-desc">App Store · билд в очереди</div>
+      </div>
+      <div class="sys-node-badge">⚠ Билд</div>
     </div>
-    <div class="sys-node sys-yellow" onclick="showDetail('cl-jewelry')" style="width:100%;margin-bottom:8px">
-      <div class="sys-icon">💍</div>
-      <div class="sys-name">Клиент — Ювелирка</div>
-      <div class="sys-status sys-status-yellow">🔧 Нужны правки</div>
+
+    <div class="sys-node node-muted" onclick="showDetail('playa')">
+      <div class="sys-node-icon">🪩</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">Playa</div>
+        <div class="sys-node-desc">Отложено</div>
+      </div>
+      <div class="sys-node-badge">—</div>
     </div>
-    <div class="sys-node sys-yellow" onclick="showDetail('cl-logistic')" style="width:100%">
-      <div class="sys-icon">🚛</div>
-      <div class="sys-name">Клиент — Логистика</div>
-      <div class="sys-status sys-status-yellow">🔧 Нужны правки</div>
+
+    <div class="sys-node node-yellow" onclick="showDetail('wa-bot')">
+      <div class="sys-node-icon">🤖</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">WA Bot</div>
+        <div class="sys-node-desc">Рассылка · продажа сайтов</div>
+      </div>
+      <div class="sys-node-badge">⚠ Dev</div>
     </div>
   </div>
 
-  <!-- ─── ИНСТРУМЕНТЫ ─────────────────── -->
-  <div style="height:10px"></div>
-  <div class="sys-section-label">🛠 ИНСТРУМЕНТЫ</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0">
-    <div class="sys-node sys-purple" onclick="showDetail('openclaw')" style="width:100%">
-      <div class="sys-icon">🤖</div>
-      <div class="sys-name">OpenClaw</div>
-      <div class="sys-status sys-status-gray">настройка · управление</div>
-    </div>
-    <div class="sys-node sys-green" onclick="showDetail('vscode')" style="width:100%">
-      <div class="sys-icon">💻</div>
-      <div class="sys-name">VS Code</div>
-      <div class="sys-status sys-status-green">✓ основной</div>
-    </div>
-  </div>
+  <!-- Расходы -->
+  <div class="sys-section">
+    <div class="sys-section-label expense">Расходы</div>
 
-  <!-- animated connector from energy up -->
-  <div class="sys-connector" style="margin:12px 0 0">
-    <div class="energy-flow">
-      <div class="energy-dot" style="animation-delay:0s"></div>
-      <div class="energy-dot" style="animation-delay:0.4s"></div>
-      <div class="energy-dot" style="animation-delay:0.8s"></div>
+    <div class="sys-node node-red" onclick="showDetail('exp-must')">
+      <div class="sys-node-icon">🏠</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">Обязательные</div>
+        <div class="sys-node-desc">Аренда, еда, транспорт</div>
+      </div>
+      <div class="sys-node-badge">—</div>
     </div>
-  </div>
 
-  <!-- ─── ЭНЕРГИЯ ─────────────────── -->
-  <div class="energy-node" onclick="showDetail('energy')">
-    <div class="energy-pulse"></div>
-    <div class="energy-inner">
-      <div style="font-size:32px">⚡</div>
-      <div class="energy-title">ЭНЕРГИЯ</div>
-      <div class="energy-sub">Диас · источник всего</div>
+    <div class="sys-node node-purple" onclick="showDetail('exp-biz')">
+      <div class="sys-node-icon">📈</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">На бизнес</div>
+        <div class="sys-node-desc">Инструменты, разработка</div>
+      </div>
+      <div class="sys-node-badge">—</div>
+    </div>
+
+    <div class="sys-node node-yellow" onclick="showDetail('exp-wish')">
+      <div class="sys-node-icon">✨</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">На желания</div>
+        <div class="sys-node-desc">10% от доходов · 8K ₸</div>
+      </div>
+      <div class="sys-node-badge">10%</div>
     </div>
   </div>
 
-  <!-- Detail panel -->
-  <div id="map-detail" class="map-detail" style="margin-top:16px">
-    <div class="map-detail-title" id="detail-title">—</div>
-    <div id="detail-why"></div>
-    <div id="detail-tasks" style="margin-top:10px"></div>
+  <!-- Инструменты -->
+  <div class="sys-section">
+    <div class="sys-section-label tools">Инструменты</div>
+
+    <div class="sys-node node-blue" onclick="showDetail('openclaw')">
+      <div class="sys-node-icon">🤖</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">OpenClaw</div>
+        <div class="sys-node-desc">Управление · агенты · автоматизация</div>
+      </div>
+      <div class="sys-node-badge">●</div>
+    </div>
+
+    <div class="sys-node node-muted" onclick="showDetail('vscode')">
+      <div class="sys-node-icon">💻</div>
+      <div class="sys-node-info">
+        <div class="sys-node-name">VS Code</div>
+        <div class="sys-node-desc">Разработка · код</div>
+      </div>
+      <div class="sys-node-badge">—</div>
+    </div>
   </div>
 
-  <div style="height:20px"></div>
+  <!-- Энергия -->
+  <div class="energy-dots">
+    <div class="energy-dot" style="animation-delay:0s"></div>
+    <div class="energy-dot" style="animation-delay:0.4s"></div>
+    <div class="energy-dot" style="animation-delay:0.8s"></div>
+  </div>
+  <div class="energy-wrap">
+    <div class="energy-circle" onclick="showDetail('energy')">
+      <div class="energy-icon">⚡</div>
+      <div class="energy-label">ДИАС</div>
+      <div class="energy-sub">источник</div>
+    </div>
+  </div>
+
+  <!-- Detail -->
+  <div id="map-detail" class="detail-panel">
+    <div class="detail-title">
+      <span id="detail-title-text">—</span>
+      <div class="detail-close" onclick="closeDetail()">✕</div>
+    </div>
+    <div id="detail-body"></div>
+    <div id="detail-tasks"></div>
+  </div>
+
+  <div style="height:24px"></div>
 </div>
 
-
-</div>
-
-<!-- BOTTOM NAV -->
+<!-- ═══════════════════ NAV ═══════════════════ -->
 <nav class="nav">
-  <div class="nav-item active" onclick="nav('home',this)"><div class="nav-icon">🏠</div><span>Главная</span></div>
-  <div class="nav-item" onclick="nav('map',this)"><div class="nav-icon">🗺️</div><span>Система</span></div>
+  <div class="nav-item active" onclick="switchPage('home',this)">
+    <div class="nav-icon">🏠</div><span>Главная</span>
+  </div>
+  <div class="nav-item" onclick="switchPage('system',this)">
+    <div class="nav-icon">🗺</div><span>Система</span>
+  </div>
 </nav>
 
 <script>
-  if (window.Telegram?.WebApp) {
-    const tg = Telegram.WebApp;
-    tg.ready();
-    tg.expand();
-    if (tg.requestFullscreen) tg.requestFullscreen();
-    try { tg.setHeaderColor('#1e1b4b'); } catch(e){}
-    try { tg.setBackgroundColor('#0a0a0f'); } catch(e){}
+// ── TG INIT ──
+if (window.Telegram?.WebApp) {
+  const tg = Telegram.WebApp;
+  tg.ready(); tg.expand();
+  if (tg.requestFullscreen) tg.requestFullscreen();
+  try { tg.setHeaderColor('#0c0a20'); } catch(e){}
+  try { tg.setBackgroundColor('#08080e'); } catch(e){}
 
-    // Apply safe area insets via CSS variables (affects ALL pages)
-    function applyInsets() {
-      const top = (tg.safeAreaInset?.top || 0) + (tg.contentSafeAreaInset?.top || 0);
-      const bottom = (tg.safeAreaInset?.bottom || 0) + (tg.contentSafeAreaInset?.bottom || 0);
-      document.documentElement.style.setProperty('--safe-top', top + 'px');
-      document.documentElement.style.setProperty('--safe-bottom', bottom + 'px');
-      document.querySelector('.nav').style.paddingBottom = `${Math.max(bottom, 8)}px`;
+  function applyInsets() {
+    const top = (tg.safeAreaInset?.top||0) + (tg.contentSafeAreaInset?.top||0);
+    const bottom = (tg.safeAreaInset?.bottom||0) + (tg.contentSafeAreaInset?.bottom||0);
+    document.documentElement.style.setProperty('--safe-top', top+'px');
+    document.documentElement.style.setProperty('--safe-bottom', bottom+'px');
+    document.querySelector('.nav').style.paddingBottom = Math.max(bottom,8)+'px';
+  }
+  applyInsets();
+  tg.onEvent('viewportChanged', applyInsets);
+  tg.onEvent('safeAreaChanged', applyInsets);
+  tg.onEvent('contentSafeAreaChanged', applyInsets);
+}
+
+// ── NAV ──
+function switchPage(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  el.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function toggleTodo(el) {
+  el.querySelector('.todo-cb').classList.toggle('checked');
+  el.classList.toggle('done');
+}
+
+// ── CHART ──
+const incomeData = { '2026-02-26': 80000 };
+let chartWeekOffset = 0;
+
+function getWeekDates(offset) {
+  const today = new Date();
+  const day = today.getDay() || 7;
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - day + 1 + offset * 7);
+  return Array.from({length:7}, (_,i) => {
+    const d = new Date(monday); d.setDate(monday.getDate()+i); return d;
+  });
+}
+function fmtKey(d) { return d.toISOString().slice(0,10); }
+function fmtDay(d) { return ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'][(d.getDay()||7)-1]; }
+function fmtK(n) { return n>=1000 ? (n/1000).toFixed(n%1000===0?0:1)+'к' : n>0 ? String(n) : '—'; }
+
+function renderChart() {
+  const dates = getWeekDates(chartWeekOffset);
+  const todayKey = fmtKey(new Date());
+  const values = dates.map(d => incomeData[fmtKey(d)]||0);
+  const maxVal = Math.max(...values, 1);
+  const total = values.reduce((a,b)=>a+b,0);
+  const first = dates[0], last = dates[6];
+
+  document.getElementById('chart-week-label').textContent =
+    `${first.getDate()}.${String(first.getMonth()+1).padStart(2,'0')} – ${last.getDate()}.${String(last.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('chart-total').innerHTML =
+    `Итого: <span>${total.toLocaleString('ru')} ₸</span>`;
+
+  const W=280, H=90, padX=18, padY=14;
+  const innerW=W-padX*2, innerH=H-padY*2, step=innerW/6;
+  const pts = values.map((v,i) => ({
+    x: padX+i*step,
+    y: padY+innerH-(v/maxVal)*innerH,
+    v
+  }));
+
+  // Smooth curve
+  function catmullRom(points) {
+    if (points.length < 2) return '';
+    let path = `M${points[0].x},${points[0].y}`;
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[Math.max(i-1,0)];
+      const p1 = points[i];
+      const p2 = points[i+1];
+      const p3 = points[Math.min(i+2, points.length-1)];
+      const cp1x = p1.x + (p2.x-p0.x)/6;
+      const cp1y = p1.y + (p2.y-p0.y)/6;
+      const cp2x = p2.x - (p3.x-p1.x)/6;
+      const cp2y = p2.y - (p3.y-p1.y)/6;
+      path += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
     }
-    applyInsets();
-    tg.onEvent('viewportChanged', applyInsets);
-    tg.onEvent('safeAreaChanged', applyInsets);
-    tg.onEvent('contentSafeAreaChanged', applyInsets);
+    return path;
   }
 
-  function nav(page, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    el.classList.add('active');
+  const linePath = catmullRom(pts);
+  const areaPath = linePath + ` L${pts[pts.length-1].x},${H} L${pts[0].x},${H} Z`;
+
+  let svg = `
+    <defs>
+      <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${areaPath}" fill="url(#cg)"/>
+    <path d="${linePath}" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  `;
+
+  pts.forEach((p,i) => {
+    const isToday = fmtKey(dates[i])===todayKey;
+    const hasVal = p.v>0;
+    if (hasVal || isToday) {
+      svg += `<circle cx="${p.x}" cy="${p.y}" r="${isToday?5:3.5}"
+        fill="${isToday?'#818cf8':'#6366f1'}"
+        ${isToday?'stroke="#0c0a20" stroke-width="2.5"':''}/>`;
+      if (hasVal) {
+        svg += `<circle cx="${p.x}" cy="${p.y}" r="8" fill="rgba(99,102,241,0.15)"/>`;
+      }
+    }
+  });
+
+  document.getElementById('chart-svg').innerHTML = svg;
+
+  document.getElementById('chart-days').innerHTML = dates.map((d,i) => {
+    const isToday = fmtKey(d)===todayKey;
+    return `<div class="chart-day ${isToday?'today':''}">
+      <div class="chart-day-name">${fmtDay(d)}</div>
+      <div class="chart-day-num">${d.getDate()}</div>
+      <div class="chart-day-val">${fmtK(values[i])}</div>
+    </div>`;
+  }).join('');
+}
+
+function chartPrev() { chartWeekOffset--; renderChart(); }
+function chartNext() { if(chartWeekOffset<0){chartWeekOffset++;renderChart();} }
+renderChart();
+
+// ── MAP DETAILS ──
+const mapData = {
+  kaspi: {
+    title: '💳 Каспи',
+    info: [{ q:'Роль', a:'Основной банк — все поступления и расходы' }],
+    tasks: [{ text:'Revenue: 80,000 ₸', color:'#4ade80' }]
+  },
+  'cl-jewelry': {
+    title: '💍 Ювелирка',
+    info: [{ q:'Кто', a:'Клиенты через Адилхана' }, { q:'Статус', a:'Активный канал дохода' }],
+    tasks: [{ text:'Канал активен ✅', color:'#4ade80' }]
+  },
+  'cl-logistic': {
+    title: '🚛 Казах Логистик',
+    info: [{ q:'Блокер', a:'Ждём финальные правки от клиента' }, { q:'Сделано', a:'Сайт задеплоен на Cloud Run (27 фев)' }],
+    tasks: [{ text:'Ждём правки ⏳', color:'#f87171' }, { text:'Сайт задеплоен ✅', color:'#4ade80' }]
+  },
+  x5: {
+    title: '⚡ x5 Marketing',
+    info: [{ q:'Почему нет продаж', a:'Нет в App Store — клиенты не могут скачать' }, { q:'Следующий шаг', a:'Билд #12 → App Store' }],
+    tasks: [{ text:'Билд #12 в очереди EAS', color:'#fbbf24' }, { text:'Скрины + описание', color:'#6366f1' }]
+  },
+  playa: {
+    title: '🪩 Playa',
+    info: [{ q:'Статус', a:'Отложено — сначала x5 в App Store' }],
+    tasks: [{ text:'Ждёт x5', color:'#94a3b8' }]
+  },
+  'wa-bot': {
+    title: '🤖 WA Bot',
+    info: [{ q:'Что делает', a:'Авто-рассылка + продажа сайтов' }, { q:'Цель', a:'Бот сам находит клиентов и продаёт' }],
+    tasks: [{ text:'Создать бота', color:'#fbbf24' }, { text:'Автоматизировать рассылку', color:'#6366f1' }]
+  },
+  'exp-must': {
+    title: '🏠 Обязательные расходы',
+    info: [{ q:'Что входит', a:'Аренда, еда, транспорт, телефон' }],
+    tasks: [{ text:'Скажи сумму — зафиксирую', color:'#94a3b8' }]
+  },
+  'exp-biz': {
+    title: '📈 Расходы на бизнес',
+    info: [{ q:'Что входит', a:'OpenClaw, инструменты, разработка' }],
+    tasks: [{ text:'Скажи сумму — зафиксирую', color:'#94a3b8' }]
+  },
+  'exp-wish': {
+    title: '✨ На желания',
+    info: [{ q:'Правило', a:'10% от всех доходов' }, { q:'Сейчас', a:'8,000 ₸' }],
+    tasks: [{ text:'8,000 ₸ на желания', color:'#fbbf24' }]
+  },
+  openclaw: {
+    title: '🤖 OpenClaw',
+    info: [{ q:'Роль', a:'Управление агентами и задачами' }, { q:'Цель', a:'Полная автономия Evil Morty' }],
+    tasks: [{ text:'Evil Morty — online ✅', color:'#4ade80' }, { text:'Worker 1 — готов', color:'#6366f1' }]
+  },
+  vscode: {
+    title: '💻 VS Code',
+    info: [{ q:'Роль', a:'Разработка: сайты, боты, приложения' }],
+    tasks: [{ text:'x5-marketing-expo — в работе', color:'#fbbf24' }]
+  },
+  energy: {
+    title: '⚡ Энергия — Диас',
+    info: [{ q:'Что это', a:'Фокус, время, рабочая сила — главный ресурс' }, { q:'Цель', a:'Минимизировать ручной труд → максимум на стратегию' }],
+    tasks: [{ text:'Автоматизировать рутину', color:'#fbbf24' }, { text:'Делегировать код воркерам', color:'#6366f1' }]
   }
+};
 
-  function toggleTodo(el) {
-    const cb = el.querySelector('.todo-cb');
-    cb.classList.toggle('checked');
-    el.classList.toggle('done');
-  }
+function showDetail(key) {
+  const d = mapData[key];
+  if (!d) return;
+  const panel = document.getElementById('map-detail');
+  document.getElementById('detail-title-text').textContent = d.title;
 
-  // ── INCOME DATA ──────────────────────────────────────────────
-  // Format: 'YYYY-MM-DD': amount (₸)
-  const incomeData = {
-    '2026-02-26': 80000,
-  };
+  document.getElementById('detail-body').innerHTML = d.info.map(i =>
+    `<div class="detail-row"><div class="detail-q">${i.q}</div><div class="detail-a">${i.a}</div></div>`
+  ).join('');
 
-  let chartWeekOffset = 0; // 0 = current week, -1 = prev, etc.
+  document.getElementById('detail-tasks').innerHTML =
+    '<div class="detail-tasks-label">Задачи</div>' +
+    d.tasks.map(t => `<div class="detail-task"><div class="detail-task-dot" style="background:${t.color}"></div>${t.text}</div>`).join('');
 
-  function getWeekDates(offset) {
-    const today = new Date();
-    const day = today.getDay() || 7; // Mon=1..Sun=7
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - day + 1 + offset * 7);
-    return Array.from({length: 7}, (_, i) => {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      return d;
-    });
-  }
+  panel.classList.add('open');
+  setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'nearest'}), 50);
+}
 
-  function fmtKey(d) {
-    return d.toISOString().slice(0, 10);
-  }
-
-  function fmtDay(d) {
-    return ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'][d.getDay() === 0 ? 6 : d.getDay() - 1];
-  }
-
-  function fmtDate(d) {
-    return `${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}`;
-  }
-
-  function fmtK(n) {
-    if (n >= 1000) return (n/1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'к';
-    return n > 0 ? String(n) : '—';
-  }
-
-  function renderChart() {
-    const dates = getWeekDates(chartWeekOffset);
-    const todayKey = fmtKey(new Date());
-    const values = dates.map(d => incomeData[fmtKey(d)] || 0);
-    const maxVal = Math.max(...values, 1);
-    const total = values.reduce((a,b) => a+b, 0);
-
-    // Week label
-    const first = dates[0], last = dates[6];
-    document.getElementById('chart-week-label').textContent =
-      `${fmtDate(first)} – ${fmtDate(last)}`;
-    document.getElementById('chart-total').textContent =
-      `Итого: ${total.toLocaleString('ru')} ₸`;
-
-    // SVG
-    const W = 280, H = 80, padX = 18, padY = 10;
-    const innerW = W - padX * 2, innerH = H - padY * 2;
-    const step = innerW / 6;
-    const pts = values.map((v, i) => {
-      const x = padX + i * step;
-      const y = padY + innerH - (v / maxVal) * innerH;
-      return { x, y, v };
-    });
-
-    // Area path
-    let area = `M${pts[0].x},${H} `;
-    pts.forEach(p => { area += `L${p.x},${p.y} `; });
-    area += `L${pts[pts.length-1].x},${H} Z`;
-
-    // Line path
-    let line = `M${pts[0].x},${pts[0].y}`;
-    pts.slice(1).forEach(p => { line += ` L${p.x},${p.y}`; });
-
-    let svg = `
-      <defs>
-        <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35"/>
-          <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="${area}" fill="url(#cg)"/>
-      <path d="${line}" fill="none" stroke="#6366f1" stroke-width="2" stroke-linejoin="round"/>
-    `;
-
-    pts.forEach((p, i) => {
-      const isToday = fmtKey(dates[i]) === todayKey;
-      const hasVal = p.v > 0;
-      svg += `<circle cx="${p.x}" cy="${p.y}" r="${isToday ? 4 : 3}"
-        fill="${isToday ? '#818cf8' : hasVal ? '#6366f1' : 'var(--border)'}"
-        stroke="${isToday ? '#1e1b4b' : 'none'}" stroke-width="2"/>`;
-    });
-
-    document.getElementById('chart-svg').innerHTML = svg;
-
-    // Day labels
-    document.getElementById('chart-days').innerHTML = dates.map((d, i) => {
-      const isToday = fmtKey(d) === todayKey;
-      return `<div class="chart-day ${isToday ? 'today' : ''}">
-        ${fmtDay(d)}<br><span style="font-size:9px;opacity:0.6">${d.getDate()}</span>
-        <div class="chart-day-val">${fmtK(values[i])}</div>
-      </div>`;
-    }).join('');
-  }
-
-  function chartPrev() { chartWeekOffset--; renderChart(); }
-  function chartNext() { if (chartWeekOffset < 0) { chartWeekOffset++; renderChart(); } }
-
-  renderChart();
-  // ─────────────────────────────────────────────────────────────
-
-  const mapData = {
-    'exp-must': {
-      title: '🏠 Обязательные расходы',
-      why: [{ q: 'Что входит?', a: 'Аренда, еда, транспорт, телефон' }],
-      tasks: [{ text: 'Скажи мне сумму — зафиксирую', color: '#94a3b8' }]
-    },
-    'exp-biz': {
-      title: '📈 Расходы на бизнес',
-      why: [{ q: 'Что входит?', a: 'OpenClaw, инструменты, разработка, боты' }],
-      tasks: [{ text: 'Скажи мне сумму — зафиксирую', color: '#94a3b8' }]
-    },
-    'exp-wish': {
-      title: '✨ Расходы на желания',
-      why: [{ q: 'Правило?', a: '10% от всех доходов уходит на желания' }, { q: 'Сейчас?', a: '10% от 80,000 ₸ = 8,000 ₸' }],
-      tasks: [{ text: '8,000 ₸ → на желания', color: '#fbbf24' }]
-    },
-    openclaw: {
-      title: '🤖 OpenClaw',
-      why: [
-        { q: 'Что делаю?', a: 'Настройка агентов, управление задачами, обновление карты' },
-        { q: 'Ограничение?', a: 'Пока Диас использует для настройки — не для автономной работы' },
-        { q: 'Цель?', a: 'Полная автономия: Evil Morty работает без участия Диаса' },
-      ],
-      tasks: [
-        { text: 'Evil Morty — online ✅', color: '#4ade80' },
-        { text: 'Worker 1 (@x5_worker_bot) — готов', color: '#6366f1' },
-      ]
-    },
-    vscode: {
-      title: '💻 VS Code',
-      why: [
-        { q: 'Что делаю?', a: 'Разработка: сайты, боты, приложения' },
-        { q: 'Когда заменить?', a: 'Когда WA бот и воркеры смогут сами писать код' },
-      ],
-      tasks: [{ text: 'x5-marketing-expo — в работе', color: '#fbbf24' }]
-    },
-    energy: {
-      title: '⚡ Энергия — Диас',
-      why: [
-        { q: 'Что это?', a: 'Твоя рабочая сила, фокус, время — главный ресурс' },
-        { q: 'Куда уходит?', a: 'OpenClaw (настройка) + VS Code (разработка)' },
-        { q: 'Цель?', a: 'Минимизировать ручной труд → максимум на стратегию' },
-      ],
-      tasks: [
-        { text: 'Автоматизировать рутину через боты', color: '#fbbf24' },
-        { text: 'Делегировать код воркерам', color: '#6366f1' },
-      ]
-    },
-    kaspi: {
-      title: '💳 Каспи',
-      why: [{ q: 'Роль?', a: 'Основной банк — все поступления и расходы через него' }],
-      tasks: [
-        { text: 'Текущий баланс: —', color: '#6366f1' },
-        { text: 'Revenue: 80,000 ₸', color: '#4ade80' },
-      ]
-    },
-    x5: {
-      title: '⚡ x5 Marketing',
-      why: [
-        { q: 'Почему нет продаж?', a: 'Нет в App Store — клиенты не могут скачать' },
-        { q: 'Почему не в App Store?', a: 'Билд #12 в очереди EAS' },
-        { q: 'Следующий шаг?', a: 'Дождаться билда → сабмит в App Store' },
-      ],
-      tasks: [
-        { text: 'Билд #12 → EAS очередь', color: '#fbbf24' },
-        { text: 'Скрины + описание App Store', color: '#6366f1' },
-      ]
-    },
-    'wa-bot': {
-      title: '🤖 WA Bot — рассылка',
-      why: [
-        { q: 'Что делает?', a: 'Автоматическая рассылка + продажа сайтов' },
-        { q: 'Статус?', a: 'В разработке — нужно создать и автоматизировать' },
-        { q: 'Цель?', a: 'Бот сам находит клиентов, сам продаёт, без Диаса' },
-      ],
-      tasks: [
-        { text: 'Создать WA бота', color: '#fbbf24' },
-        { text: 'Автоматизировать рассылку', color: '#6366f1' },
-        { text: 'Подключить продажу сайтов', color: '#6366f1' },
-      ]
-    },
-    playa: {
-      title: '🪩 Playa',
-      why: [{ q: 'Статус?', a: 'Отложено — сначала x5 в App Store' }],
-      tasks: [{ text: 'Ждёт x5 Marketing', color: '#94a3b8' }]
-    },
-    'cl-jewelry': {
-      title: '💍 Клиент — Ювелирка',
-      why: [
-        { q: 'Кто?', a: 'Клиенты через Адилхана — ювелирные заказы' },
-        { q: 'Статус?', a: 'Активный канал' },
-      ],
-      tasks: [{ text: 'Канал активен ✅', color: '#4ade80' }]
-    },
-    'cl-logistic': {
-      title: '🚛 Клиент — Логистика',
-      why: [
-        { q: 'Почему блокер?', a: 'Ждём финальные правки от клиента' },
-        { q: 'Что сделано?', a: 'Сайт задеплоен на Cloud Run (27 фев)' },
-        { q: 'Следующий шаг?', a: 'Клиент пришлёт список → закрываем' },
-      ],
-      tasks: [
-        { text: 'Ждём правки от клиента ⏳', color: '#f87171' },
-        { text: 'Сайт задеплоен ✅', color: '#4ade80' },
-      ]
-    },
-
-  };
-
-  function showDetail(key) {
-    const d = mapData[key];
-    const panel = document.getElementById('map-detail');
-    document.getElementById('detail-title').innerHTML = d.title;
-    document.getElementById('detail-why').innerHTML = d.why.map((w,i) =>
-      `<div class="why-item"><span class="why-num">${i+1}.</span><div><b style="color:var(--text);font-size:12px">${w.q}</b><div class="why-text">${w.a}</div></div></div>`
-    ).join('');
-    document.getElementById('detail-tasks').innerHTML = '<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Задачи</div>' +
-      d.tasks.map(t => `<div class="map-task-item"><div class="map-task-dot" style="background:${t.color}"></div>${t.text}</div>`).join('');
-    panel.classList.add('open');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
+function closeDetail() {
+  document.getElementById('map-detail').classList.remove('open');
+}
 </script>
 </body>
 </html>
