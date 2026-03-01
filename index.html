@@ -25,7 +25,7 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
 
     /* HEADER */
-    .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%); padding: 20px 16px 36px; padding-top: max(20px, env(safe-area-inset-top, 20px)); position: relative; overflow: hidden; }
+    .header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%); padding: 20px 16px 36px; padding-top: calc(20px + var(--safe-top)); position: relative; overflow: hidden; }
     .header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; background: rgba(99,102,241,0.15); border-radius: 50%; }
     .header::after { content: ''; position: absolute; bottom: -20px; left: 0; right: 0; height: 40px; background: var(--bg); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
     .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; position: relative; z-index: 1; }
@@ -45,8 +45,11 @@
     .nav-icon { font-size: 20px; margin-bottom: 2px; transition: transform 0.2s; }
 
     /* PAGES */
-    .page { display: none; padding: 16px; }
+    :root { --safe-top: 0px; --safe-bottom: 0px; }
+    .page { display: none; padding: 16px; padding-top: calc(16px + var(--safe-top)); }
     .page.active { display: block; }
+    /* Home page has its own header that handles top inset */
+    #page-home { padding-top: 0; }
 
     /* SECTIONS */
     .section-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 22px; display: flex; align-items: center; gap: 6px; }
@@ -550,19 +553,6 @@
   <!-- connector -->
   <div class="sys-connector"><div class="sys-line"></div></div>
 
-  <!-- ─── OPENCLAW ─────────────────── -->
-  <div class="sys-openclaw-node" onclick="showDetail('openclaw')">
-    <div style="font-size:28px;filter:drop-shadow(0 0 10px rgba(99,102,241,0.8));animation:morty-glow 3s ease-in-out infinite">🤖</div>
-    <div style="flex:1">
-      <div class="sys-center-title">OpenClaw</div>
-      <div class="sys-center-sub">Выполнение задач · движок</div>
-    </div>
-    <div style="font-size:10px;color:#4ade80;font-weight:600;white-space:nowrap">● online</div>
-  </div>
-
-  <!-- connector -->
-  <div class="sys-connector"><div class="sys-line"></div></div>
-
   <!-- ─── ДОХОДЫ ─────────────────── -->
   <div class="sys-section-label">💰 ДОХОДЫ</div>
 
@@ -781,11 +771,12 @@
     try { tg.setHeaderColor('#1e1b4b'); } catch(e){}
     try { tg.setBackgroundColor('#0a0a0f'); } catch(e){}
 
-    // Apply safe area insets
+    // Apply safe area insets via CSS variables (affects ALL pages)
     function applyInsets() {
       const top = (tg.safeAreaInset?.top || 0) + (tg.contentSafeAreaInset?.top || 0);
       const bottom = (tg.safeAreaInset?.bottom || 0) + (tg.contentSafeAreaInset?.bottom || 0);
-      document.querySelector('.header').style.paddingTop = `${20 + top}px`;
+      document.documentElement.style.setProperty('--safe-top', top + 'px');
+      document.documentElement.style.setProperty('--safe-bottom', bottom + 'px');
       document.querySelector('.nav').style.paddingBottom = `${Math.max(bottom, 8)}px`;
     }
     applyInsets();
