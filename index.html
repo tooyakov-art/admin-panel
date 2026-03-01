@@ -738,7 +738,14 @@
 </nav>
 
 <script>
-  if (window.Telegram?.WebApp) { Telegram.WebApp.ready(); Telegram.WebApp.expand(); }
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+    if (Telegram.WebApp.requestFullscreen) Telegram.WebApp.requestFullscreen();
+    // Hide close confirmation, set header color to match bg
+    try { Telegram.WebApp.setHeaderColor('#0a0a0f'); } catch(e){}
+    try { Telegram.WebApp.setBackgroundColor('#0a0a0f'); } catch(e){}
+  }
 
   function nav(page, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
